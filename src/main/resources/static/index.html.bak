@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>页面流量</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row" style="margin-top: 20px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group col-md-3">
+                    <input type="text" class="form-control" id="memberId" placeholder="请输入memberid" value="5009055">
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="text" class="form-control" id="start" placeholder="开始时间" value="2017-12-05 00:00:00">
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="text" class="form-control" id="end" placeholder="结束时间" value="2017-12-06 00:00:00">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-default glyphicon glyphicon-play" id="queryBtn">&nbsp;查询</button>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-default glyphicon glyphicon-pause" id="stopBtn">&nbsp;停止</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel panel-primary row">
+        <div class="panel-heading">
+            <h3 class="panel-title">提示信息</h3>
+        </div>
+        <div class="panel-body" id="info">
+            <table class="table table-hover">
+                <caption>数据</caption>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>url</th>
+                    <th>name</th>
+                </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
