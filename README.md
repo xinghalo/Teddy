@@ -7,4 +7,6 @@
 1. streaming 7*24小时的监控，如果出现故障就发送邮件
 2. 支持任务的查看与spark UI的跳转
 
+前端参考：http://www.cssmoban.com/cssthemes/6836.shtml
+
 
