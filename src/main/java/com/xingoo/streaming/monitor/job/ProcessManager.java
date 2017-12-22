@@ -1,12 +1,14 @@
 package com.xingoo.streaming.monitor.job;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import com.xingoo.streaming.monitor.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -33,25 +35,25 @@ public class ProcessManager {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public String start(String id, String command, String path){
+    public String start(Task task){
         pool.execute(new Thread(()->{
             FileWriter writer = null;
             try {
-                writer = new FileWriter("/Users/xingoo/uploads/out1", true);
-//                File log = new File("/User/xingoo/uploads/1");
-                Process process = Runtime.getRuntime().exec(command);
+                writer = new FileWriter(Constants.LOG_PATH+task.getId(), true);
+
+                Process process = Runtime.getRuntime().exec("ping www.baidu.com");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
+                // todo 这么输出真古老！！！感觉像是jdk 1.5的代码！
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                    //FileUtils.write(log,line,true);
+                    System.out.println(Thread.currentThread().getName()+":"+line);
                     writer.write(line);
                     writer.flush();
                 }
+
             } catch (IOException e) {
                 logger.error(e.getMessage());
-
             } finally {
                 try {
                     writer.close();
@@ -60,6 +62,6 @@ public class ProcessManager {
                 }
             }
         }));
-        return "aaa";
+        return task.getId();
     }
 }

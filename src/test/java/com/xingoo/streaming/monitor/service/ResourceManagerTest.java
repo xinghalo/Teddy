@@ -1,11 +1,10 @@
 package com.xingoo.streaming.monitor.service;
 
 import com.xingoo.streaming.monitor.Application;
-import com.xingoo.streaming.monitor.resource.ResourceManager;
+import com.xingoo.streaming.monitor.resource.Resources;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -21,18 +20,10 @@ import java.time.LocalDateTime;
 @WebAppConfiguration
 public class ResourceManagerTest {
 
-    @Autowired
-    private ResourceManager resourceManager;
-
     @Test
     public void test1(){
-        File[] files = resourceManager.listJars();
+        File[] files = Resources.listJars();
         Assert.assertEquals(files.length,2);
-    }
-
-    @Test
-    public void test2(){
-        System.out.println(resourceManager.addJars("aa"));
     }
 
     @Test

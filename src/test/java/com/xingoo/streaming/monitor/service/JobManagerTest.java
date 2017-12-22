@@ -19,7 +19,7 @@ public class JobManagerTest {
 
     @Test
     public void startPing(){
-        processManager.start("123","ping www.baidu.com","/");
+        //processManager.start("123","ping www.baidu.com","/");
 
         try {
             Thread.sleep(10000);
