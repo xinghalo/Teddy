@@ -11,6 +11,16 @@
     <link href="css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="js/uploadify/uploadify.css">
+    <!-- jQuery 2.0.2 -->
+    <script src="http://apps.bdimg.com/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <!-- jQuery UI 1.10.3 -->
+    <script src="js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/uploadify/jquery.uploadify.js"></script>
+
 </head>
 <body class="skin-black">
     <!-- header logo: style can be found in header.less -->
@@ -55,13 +65,13 @@
                         </a>
                     </li>
 
-                    <li tag="c3">
-                        <a href="javascript:;" tag="c3">
+                    <li tag="c3" id="c3_menu">
+                        <a href="javascript:;">
                             <i class="fa fa-globe"></i> <span>资源管理</span>
                         </a>
                     </li>
                     <li tag="c4">
-                        <a href="javascript:;" >
+                        <a href="javascript:;">
                             <i class="fa fa-glass"></i> <span>配置</span>
                         </a>
                     </li>
@@ -74,8 +84,20 @@
             <section id="c1" class="content">
                 监控台
                 <div class="row" style="margin-bottom:5px;">
+                    <form>
+                        <div id="queue"></div>
+                        <input id="file_upload" name="file_upload" type="file" multiple="true">
+                    </form>
 
-
+                    <div>
+                        <div id="fileQueue">
+                        </div>
+                        <input type="file" name="uploadify" id="uploadify" />
+                        <p>
+                            <a href="javascript:$('#uploadify').uploadify('upload')">上传</a>|
+                            <a href="javascript:$('#uploadify').uploadify('cancel')">取消上传</a>
+                        </p>
+                    </div>
 
                 </div>
             </section>
@@ -88,11 +110,23 @@
                 </div>
             </section>
             <section id="c3" class="content" style="display: none">
-                资源管理
-                <div class="row" style="margin-bottom:5px;">
+                <div class="row" >
 
+                </div>
+                <div class="row" style="margin:20px;">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>大小</th>
+                            <th>上传时间</th>
+                            <th>删除</th>
+                        </tr>
+                        </thead>
+                        <tbody id="c3_body">
 
-
+                        </tbody>
+                    </table>
                 </div>
             </section>
             <section id="c4" class="content" style="display: none">
@@ -105,12 +139,8 @@
             </section>
         </aside><!-- /.right-side -->
     </div><!-- ./wrapper -->
-    <!-- jQuery 2.0.2 -->
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <!-- jQuery UI 1.10.3 -->
-    <script src="js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
-    <!-- Bootstrap -->
-    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+
+
     <script src="main.js" type="text/javascript"></script>
 </body>
 </html>
