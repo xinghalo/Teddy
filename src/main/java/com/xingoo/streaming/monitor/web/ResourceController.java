@@ -30,18 +30,16 @@ public class ResourceController {
     private Environment env;
 
     @RequestMapping("upload")
-    public String upload(@RequestParam("file") MultipartFile file){
-        String resourcePath = env.getProperty(Constants.STORAGE_PATH);
-
+    public List<com.xingoo.streaming.monitor.resource.File> upload(@RequestParam("file") MultipartFile file){
         try {
             FileUtils.writeByteArrayToFile(
-                    new File(resourcePath+file.getOriginalFilename()),
+                    new File(Constants.STORAGE_PATH+file.getOriginalFilename()),
                     file.getBytes());
 
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        return resourcePath;
+        return list();
     }
 
     @RequestMapping("list")

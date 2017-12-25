@@ -9,8 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,7 +26,7 @@ public class ProcessManager {
      *
      * http://blog.csdn.net/suifeng3051/article/details/48807423
      */
-    private static BlockingQueue<Process> processes = new ArrayBlockingQueue<Process>(1000);
+    private static ConcurrentHashMap<String,Task> processes = new ConcurrentHashMap<>();
 
     /**
      * 基于线程池创建spark streaming启动任务
@@ -35,13 +35,14 @@ public class ProcessManager {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public String start(Task task){
+    public Task start(Task task){
         pool.execute(new Thread(()->{
             FileWriter writer = null;
             try {
                 writer = new FileWriter(Constants.LOG_PATH+task.getId(), true);
 
                 Process process = Runtime.getRuntime().exec("ping www.baidu.com");
+                processes.put(task.getId(),task.setProcess(process));
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
                 // todo 这么输出真古老！！！感觉像是jdk 1.5的代码！
@@ -62,6 +63,17 @@ public class ProcessManager {
                 }
             }
         }));
-        return task.getId();
+
+        return task;
+    }
+
+    public Boolean stop(String id){
+        processes.get(id).getProcess().destroy();
+        processes.remove(id);
+        return true;
+    }
+
+    public Collection<Task> list(){
+        return processes.values();
     }
 }
