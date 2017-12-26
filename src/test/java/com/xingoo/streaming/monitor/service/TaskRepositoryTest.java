@@ -1,7 +1,8 @@
 package com.xingoo.streaming.monitor.service;
 
 import com.xingoo.streaming.monitor.Application;
-import com.xingoo.streaming.monitor.manager.job.ProcessManager;
+import com.xingoo.streaming.monitor.dao.TaskJPARepository;
+import com.xingoo.streaming.monitor.manager.job.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +13,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class JobManagerTest {
+public class TaskRepositoryTest {
 
     @Autowired
-    private ProcessManager processManager;
+    private TaskJPARepository taskRepository;
 
     @Test
-    public void startPing(){
-        //processManager.start("123","ping www.baidu.com","/");
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void test(){
+        Task task = taskRepository.findOne("1");
+        System.out.println(task);
     }
 }

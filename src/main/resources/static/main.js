@@ -56,9 +56,14 @@ $(function() {
             html = "";
             var data = response.data;
             for (var i=0; i< data.length; i++) {
-                html += "<tr><td>"+data[i].name+"</td>";
+                html += "<tr><td>"+data[i].id+"</td>";
+                html += "<td>"+data[i].name+"</td>";
                 html += "<td>"+data[i].command+"</td>";
-                html += "<td>"+data[i].createTime+"</td>";
+                html += "<td>"+data[i].create_time+"</td>";
+                html += "<td>"+data[i].application_id+"</td>";
+                html += "<td>"+data[i].state+"</td>";
+                html += "<td>"+data[i].web_url+"</td>";
+                html += "<td>"+data[i].modify_time+"</td>";
                 html += "<td><button type='button' class='btn btn-default'><span class='glyphicon glyphicon-remove'></span> 停止</button></td></tr>";
             }
             $('#c1_body').empty();

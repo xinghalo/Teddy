@@ -1,6 +1,6 @@
-package com.xingoo.streaming.monitor.web;
+package com.xingoo.streaming.monitor.controller;
 
-import com.xingoo.streaming.monitor.resource.Resources;
+import com.xingoo.streaming.monitor.manager.resource.Resources;
 import com.xingoo.streaming.monitor.utils.Constants;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -14,11 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("jar")
@@ -30,7 +26,7 @@ public class ResourceController {
     private Environment env;
 
     @RequestMapping("upload")
-    public List<com.xingoo.streaming.monitor.resource.File> upload(@RequestParam("file") MultipartFile file){
+    public Collection<File> upload(@RequestParam("file") MultipartFile file){
         try {
             FileUtils.writeByteArrayToFile(
                     new File(Constants.STORAGE_PATH+file.getOriginalFilename()),
@@ -43,17 +39,8 @@ public class ResourceController {
     }
 
     @RequestMapping("list")
-    public List<com.xingoo.streaming.monitor.resource.File> list(){
-        return Arrays
-                .stream(Resources.listJars())
-                .map(file -> {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String name = file.getName();
-                    String size = file.length()/1024+"Kb";
-                    String createTime = sdf.format(new Date(file.lastModified()));
-                    return new com.xingoo.streaming.monitor.resource.File(name,size,createTime);
-                })
-                .collect(Collectors.toList());
+    public Collection<File> list(){
+        return Resources.listJars();
     }
 
 }

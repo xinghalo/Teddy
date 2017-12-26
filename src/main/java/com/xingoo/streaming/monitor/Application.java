@@ -1,6 +1,6 @@
 package com.xingoo.streaming.monitor;
 
-import com.xingoo.streaming.monitor.conf.AppConfig;
+import com.xingoo.streaming.monitor.config.AppConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

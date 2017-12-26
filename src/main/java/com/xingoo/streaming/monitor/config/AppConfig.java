@@ -1,4 +1,4 @@
-package com.xingoo.streaming.monitor.conf;
+package com.xingoo.streaming.monitor.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
