@@ -1,13 +1,16 @@
 package com.xingoo.streaming.monitor.controller;
 
-import com.xingoo.streaming.monitor.manager.job.ProcessManager;
-import com.xingoo.streaming.monitor.manager.job.Task;
+import com.xingoo.streaming.monitor.manager.ProcessManager;
+import com.xingoo.streaming.monitor.manager.ResourceManager;
+import com.xingoo.streaming.monitor.manager.Task;
 import com.xingoo.streaming.monitor.service.TaskService;
 import com.xingoo.streaming.monitor.utils.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
 
 @RestController
 @RequestMapping("task")
@@ -17,16 +20,18 @@ public class TaskController {
     private ProcessManager processManager;
 
     @Autowired
+    private ResourceManager resourceManager;
+
+    @Autowired
     private TaskService taskService;
 
     @RequestMapping("start")
     public Response start(String name, String clazz, String jar, String settings, String[] args){
-        if(StringUtils.isBlank(jar) || StringUtils.isBlank(clazz)){
-            return Response.ERROR("参数不合法");
-        }
+
+        String jars = StringUtils.join(resourceManager.listJars(),",");
 
         // 封装命令
-        Task task = new Task(name,clazz,jar,settings,args);
+        Task task = new Task(name,clazz,jar,jars,settings,args);
 
         // 保存并启动进程
         taskService.saveAndStart(task);
@@ -36,7 +41,6 @@ public class TaskController {
 
     @RequestMapping("stop")
     public Response stop(String id){
-//        return Response.ERROR("失败");
         return Response.SUCCESS(null);
     }
 

@@ -2,7 +2,7 @@ package com.xingoo.streaming.monitor.service;
 
 import com.xingoo.streaming.monitor.Application;
 import com.xingoo.streaming.monitor.dao.TaskJPARepository;
-import com.xingoo.streaming.monitor.manager.job.Task;
+import com.xingoo.streaming.monitor.manager.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

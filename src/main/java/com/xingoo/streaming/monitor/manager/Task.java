@@ -1,12 +1,11 @@
-package com.xingoo.streaming.monitor.manager.job;
+package com.xingoo.streaming.monitor.manager;
 
-import com.xingoo.streaming.monitor.manager.resource.Resources;
+
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.File;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -32,18 +31,15 @@ public class Task implements Serializable{
 
     public Task(){}
 
-    public Task(String id,String name,String command,Long create_time){
-        this.id = id;
-        this.name = name;
-        this.command = command;
-        this.create_time = create_time;
-    }
-
-    public Task(String name,String clazz,String jar,String settings, String[] args){
+    public Task(String name,String clazz,String jar, String jars,String settings, String[] args){
         this.name = name;
         this.id = this.name+"_"+this.create_time;
 
-        String jars = StringUtils.join(Resources.listJars().stream().map(File::getName).toArray(),",");
+        //默认配置
+        if(StringUtils.isBlank(settings)){
+            settings = "--master yarn --deploy-mode cluster --executor-memory 5G --num-executors 5 --executor-cores 3 --driver-memory 5G ";
+        }
+
 
         this.command = "spark2-submit "
                 + settings
@@ -54,9 +50,11 @@ public class Task implements Serializable{
                 + " "
                 + jar
                 + " "
-                + String.join(" ",args)
+                + name
                 + " "
-                + id;
+                + id
+                +" "
+                + String.join(" ",args);
     }
 
     @Id

@@ -1,4 +1,4 @@
-package com.xingoo.streaming.monitor.manager.job;
+package com.xingoo.streaming.monitor.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class ProcessManager {
         new Thread(()->{
             try {
                 System.out.println(task.getCommand());
-                Runtime.getRuntime().exec("ping www.baidu.com");
+                Runtime.getRuntime().exec(task.getCommand());
             } catch (IOException e) {
                 logger.error(e.getMessage());
             }

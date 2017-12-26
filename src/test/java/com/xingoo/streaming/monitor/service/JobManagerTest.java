@@ -1,7 +1,7 @@
 package com.xingoo.streaming.monitor.service;
 
 import com.xingoo.streaming.monitor.Application;
-import com.xingoo.streaming.monitor.manager.job.ProcessManager;
+import com.xingoo.streaming.monitor.manager.ProcessManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ public class JobManagerTest {
     public void startPing(){
         //processManager.start("123","ping www.baidu.com","/");
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }

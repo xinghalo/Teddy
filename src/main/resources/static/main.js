@@ -33,16 +33,22 @@ $(function() {
     })
 
     //刷新表格数据
-    function fileListParser(result){
-        html = "";
-        for (var i=0; i< result.length; i++) {
-            html += "<tr><td>"+result[i].name+"</td>";
-            html += "<td>"+result[i].size+"</td>";
-            html += "<td>"+result[i].createTime+"</td>";
-            html += "<td><button type='button' class='btn btn-default'><span class='glyphicon glyphicon-remove'></span> 删除</button></td></tr>";
+    function fileListParser(response){
+        if(response.state === "success"){
+            html = "";
+            var data = response.data;
+            for (var i=0; i< data.length; i++) {
+                html += "<tr><td>"+data[i]+"</td>";
+                html += "<td>"+1+"</td>";
+                html += "<td>"+1+"</td>";
+                html += "<td><button type='button' class='btn btn-default'><span class='glyphicon glyphicon-remove'></span> 删除</button></td></tr>";
+            }
+            $('#c3_body').empty();
+            $('#c3_body').html(html);
+        }else{
+            alert(response.data);
         }
-        $('#c3_body').empty();
-        $('#c3_body').html(html);
+
     }
 
     $('#c1_menu').click(function(){
@@ -69,7 +75,6 @@ $(function() {
             $('#c1_body').empty();
             $('#c1_body').html(html);
         }else{
-
             alert(response.data);
         }
     }

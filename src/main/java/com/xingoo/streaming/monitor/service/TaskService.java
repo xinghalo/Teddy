@@ -1,8 +1,8 @@
 package com.xingoo.streaming.monitor.service;
 
 import com.xingoo.streaming.monitor.dao.TaskJPARepository;
-import com.xingoo.streaming.monitor.manager.job.ProcessManager;
-import com.xingoo.streaming.monitor.manager.job.Task;
+import com.xingoo.streaming.monitor.manager.ProcessManager;
+import com.xingoo.streaming.monitor.manager.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
