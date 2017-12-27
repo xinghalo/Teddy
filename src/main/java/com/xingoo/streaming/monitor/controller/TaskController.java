@@ -31,7 +31,14 @@ public class TaskController {
         String jars = StringUtils.join(resourceManager.listJars(),",");
 
         // 封装命令
-        Task task = new Task(name,clazz,jar,jars,settings,args);
+        Task task = new Task(
+                name,
+                clazz,
+                resourceManager.getJar(jar),
+                resourceManager.getCommandJars(jar),
+                settings,
+                args
+        );
 
         // 保存并启动进程
         taskService.saveAndStart(task);
@@ -39,9 +46,9 @@ public class TaskController {
         return Response.SUCCESS(taskService.listAll());
     }
 
-    @RequestMapping("stop")
-    public Response stop(String id){
-        return Response.SUCCESS(null);
+    @RequestMapping("delete")
+    public Response delete(String id){
+        return Response.SUCCESS(taskService.delete(id));
     }
 
     @RequestMapping("list")

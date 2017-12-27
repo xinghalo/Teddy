@@ -31,4 +31,9 @@ public class TaskService {
     public List<Task> listAll(){
         return taskJPARepository.findAll();
     }
+
+    public List<Task> delete(String id){
+        taskJPARepository.delete(id);
+        return taskJPARepository.findAll();
+    }
 }

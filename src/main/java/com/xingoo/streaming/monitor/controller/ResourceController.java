@@ -25,4 +25,8 @@ public class ResourceController {
         return Response.SUCCESS(resourceManager.listJars());
     }
 
+    @RequestMapping("delete")
+    public Response delete(String jar){
+        return Response.SUCCESS(resourceManager.delete(jar));
+    }
 }

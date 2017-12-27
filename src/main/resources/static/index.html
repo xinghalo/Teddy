@@ -21,6 +21,10 @@
 </head>
 <body class="skin-black">
     <!-- header logo: style can be found in header.less -->
+    <div id="alertDiv" class="alert alert-success alert-dismissable" style="display:none">
+        <button id="alertBtn" type="button" class="close">&times;</button>
+        <p id="alertP"></p>
+    </div>
     <header class="header">
         <a href="index.html" class="logo">StreamingMonitor</a>
         <!-- Header Navbar: style can be found in header.less -->
@@ -83,15 +87,15 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>id</th>
+                            <th></th>
                             <th>name</th>
                             <th>命令</th>
-                            <th>创建时间</th>
+                            <!--<th>创建时间</th>-->
                             <th>app_id</th>
                             <th>状态</th>
-                            <th>web_url</th>
+                            <!--<th>web_url</th>
                             <th>修改时间</th>
-                            <th>操作</th>
+                            <th>操作</th>-->
                         </tr>
                         </thead>
                         <tbody id="c1_body">
@@ -101,11 +105,39 @@
                 </div>
             </section>
             <section id="c2" class="content" style="display: none">
-                任务管理
                 <div class="row" style="margin-bottom:5px;">
-
-
-
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名字</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="c2NameInput" type="text"  value="test_xingoo">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">jar</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="c2JarInput" type="text" value="streaming.jar">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">class</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="c2ClassInput" type="text" value="com.tgou.data.stanford.streaming.monitor.MonitoringTest">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">args</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="c2ArgsInput" type="text" value="1,2,3">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> </label>
+                            <div class="col-sm-10">
+                                <button type="submit" id="c2SubmitBtn" class="btn btn-default">启动</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </section>
             <section id="c3" class="content" style="display: none">

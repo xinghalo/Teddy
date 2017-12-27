@@ -2,6 +2,8 @@ package com.xingoo.streaming.monitor.manager;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,31 +26,52 @@ public class ResourceManager {
     @Autowired
     private Environment env;
 
-    /**
-     * 显示所有的jars
-     * @return file数组
-     */
     public List<String> listJars(){
 
-        Collection<File> files = FileUtils.listFiles(new File(env.getProperty(PATH)),
-                FileFilterUtils.suffixFileFilter("jar"),
-                null);
-        return files.stream().map(file -> file.getName()).collect(Collectors.toList());
+        File directory = new File(env.getProperty(PATH));
+        IOFileFilter filter = FileFilterUtils.suffixFileFilter("jar");
+
+        // filter *.jar
+        Collection<File> files = FileUtils.listFiles(directory,filter,null);
+        return files.stream().map(File::getAbsolutePath).collect(Collectors.toList());
 
     }
 
-    /**
-     * 保存到指定的目录
-     * @param file
-     * @return
-     */
     public List<String> save(MultipartFile file){
         try {
-            FileUtils.writeByteArrayToFile(new File(env.getProperty(PATH)+file.getOriginalFilename()),
-                    file.getBytes());
+            File saveFile = new File(env.getProperty(PATH)+file.getOriginalFilename());
+
+            // delete when exsit
+            if(saveFile.exists()){
+                saveFile.delete();
+            }
+
+            // save
+            FileUtils.writeByteArrayToFile(saveFile,file.getBytes());
 
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+        return listJars();
+    }
+
+    public String getCommandJars(String jar){
+
+        List<String> jars = listJars().stream()
+                .filter(s -> !s.equals(getJar(jar)))
+                .collect(Collectors.toList());
+
+        return StringUtils.join(jars, ",");
+    }
+
+    public String getJar(String jar){
+        return env.getProperty(PATH)+jar;
+    }
+
+    public List<String> delete(String jar){
+        File file = new File(jar);
+        if(file.exists()){
+            file.delete();
         }
         return listJars();
     }
