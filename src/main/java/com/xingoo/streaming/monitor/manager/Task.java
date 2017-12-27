@@ -40,12 +40,11 @@ public class Task implements Serializable{
             settings = "--master yarn --deploy-mode cluster --executor-memory 5G --num-executors 5 --executor-cores 3 --driver-memory 5G ";
         }
 
-
         this.command = "spark2-submit "
                 + settings
-                + " --jars \""
+                + " --jars "
                 + jars
-                + "\" --class "
+                + " --class "
                 + clazz
                 + " "
                 + jar
@@ -53,7 +52,7 @@ public class Task implements Serializable{
                 + name
                 + " "
                 + id
-                +" "
+                + " "
                 + String.join(" ",args);
     }
 
