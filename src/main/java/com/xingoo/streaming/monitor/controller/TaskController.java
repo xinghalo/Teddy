@@ -26,9 +26,13 @@ public class TaskController {
     private TaskService taskService;
 
     @RequestMapping("start")
-    public Response start(String name, String clazz, String jar, String settings, String[] args){
-
-        String jars = StringUtils.join(resourceManager.listJars(),",");
+    public Response start(String name,
+                          String clazz,
+                          String jar,
+                          String settings,
+                          String email,
+                          Integer is_send_email,
+                          String[] args){
 
         // 封装命令
         Task task = new Task(
@@ -37,7 +41,9 @@ public class TaskController {
                 resourceManager.getJar(jar),
                 resourceManager.getCommandJars(jar),
                 settings,
-                args
+                args,
+                email,
+                is_send_email
         );
 
         // 保存并启动进程

@@ -135,6 +135,8 @@ $(function() {
         data.append("jar",  $('#c2JarInput').val());
         data.append("clazz",$('#c2ClassInput').val());
         data.append("args", $('#c2ArgsInput').val());
+        data.append("email",$('#c2EmailInput').val());
+        data.append("is_send_email",$('input.send-email:radio:checked').val());
 
         $.ajax({
             url: "/task/start",

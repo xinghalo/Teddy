@@ -28,12 +28,16 @@ public class Task implements Serializable{
     private String web_url;
     private String state;
     private Date modify_time;
+    private String email;
+    private Integer is_send_email;
 
     public Task(){}
 
-    public Task(String name,String clazz,String jar, String jars,String settings, String[] args){
+    public Task(String name,String clazz,String jar, String jars,String settings, String[] args, String email, Integer is_send_email){
         this.name = name;
         this.id = this.name+"_"+this.create_time;
+        this.email = email;
+        this.is_send_email = is_send_email;
 
         //默认配置
         if(StringUtils.isBlank(settings)){
@@ -119,5 +123,21 @@ public class Task implements Serializable{
 
     public void setModify_time(Date modify_time) {
         this.modify_time = modify_time;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getIs_send_email() {
+        return is_send_email;
+    }
+
+    public void setIs_send_email(Integer is_send_email) {
+        this.is_send_email = is_send_email;
     }
 }
