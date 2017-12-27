@@ -35,8 +35,6 @@ public class Task implements Serializable{
 
     public Task(String name,String clazz,String jar, String jars,String settings, String[] args, String email, Integer is_send_email){
 
-
-
         this.name = name;
         this.id = this.name+"_"+this.create_time;
         this.email = email;

@@ -51,8 +51,6 @@ public class TaskController {
                 is_send_email
         );
 
-        logger.info("收到请求:"+ JSON.toJSONString(task));
-
         // 保存并启动进程
         taskService.saveAndStart(task);
 
