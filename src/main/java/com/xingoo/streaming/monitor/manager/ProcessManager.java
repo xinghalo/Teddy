@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * 如果考虑单例，可以参考http://cantellow.iteye.com/blog/838473
@@ -23,7 +21,6 @@ public class ProcessManager {
                 System.out.println(task.getCommand());
 
                 Process process = Runtime.getRuntime().exec(task.getCommand());
-                //Process process = Runtime.getRuntime().exec("ping www.baidu.com");
 
 //                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 //                BufferedReader readerError = new BufferedReader(new InputStreamReader(process.getErrorStream()));

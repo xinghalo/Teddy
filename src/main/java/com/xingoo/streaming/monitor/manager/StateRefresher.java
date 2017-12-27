@@ -10,6 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,10 @@ import java.util.List;
 public class StateRefresher implements ApplicationRunner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${state.refresh.interval}")
+    private Integer stateRefreshInterval;
+
 
     @Autowired
     private TaskJPARepository taskJPARepository;
@@ -55,7 +60,7 @@ public class StateRefresher implements ApplicationRunner {
                 });
 
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(stateRefreshInterval);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
