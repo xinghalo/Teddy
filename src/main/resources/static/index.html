@@ -83,19 +83,18 @@
         <aside class="right-side">
             <!-- Main content -->
             <section id="c1" class="content">
-                <div class="row" style="margin-bottom:5px;">
+                <div class="row" style="margin:20px;">
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th></th>
+
                             <th>name</th>
                             <th>命令</th>
-                            <!--<th>创建时间</th>-->
-                            <th>app_id</th>
+                            <th>Application_id</th>
                             <th>状态</th>
-                            <!--<th>web_url</th>
-                            <th>修改时间</th>
-                            <th>操作</th>-->
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody id="c1_body">
@@ -105,7 +104,7 @@
                 </div>
             </section>
             <section id="c2" class="content" style="display: none">
-                <div class="row" style="margin-bottom:5px;">
+                <div class="row" style="margin:20px;">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">名字</label>
@@ -199,6 +198,30 @@
         </aside><!-- /.right-side -->
     </div><!-- ./wrapper -->
 
+    <div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="info_modal_title">
+
+                    </h4>
+                </div>
+                <div class="modal-body" id="info_modal_body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <!--<button type="button" class="btn btn-primary">
+                        确认
+                    </button>-->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 
     <script src="main.js" type="text/javascript"></script>
 </body>

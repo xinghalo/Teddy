@@ -23,9 +23,13 @@ public class TaskService {
         return taskJPARepository.findOne(id);
     }
 
-    public void saveAndStart(Task task){
+    public void save(Task task){
         taskJPARepository.save(task);
+    }
+
+    public List<Task> start(Task task){
         processManager.start(task);
+        return listAll();
     }
 
     public List<Task> listAll(){
@@ -35,5 +39,11 @@ public class TaskService {
     public List<Task> delete(String id){
         taskJPARepository.delete(id);
         return taskJPARepository.findAll();
+    }
+
+    public List<Task> stop(String id) {
+        Task task = taskJPARepository.findOne(id);
+        processManager.stop(task);
+        return listAll();
     }
 }

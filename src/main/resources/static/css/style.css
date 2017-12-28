@@ -12,7 +12,7 @@ body {
   font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
   min-height: 100%;
-  background: #f1f2f7;
+  background: #ffffff;
 }
 a {
   color: #3c8dbc;
@@ -52,7 +52,7 @@ body > .header {
 }
 /*right side - contins main content*/
 .right-side {
-  background-color: #f1f2f7;
+  background-color: #ffffff;
   margin-left: 220px;
 }
 /*left side - contains sidebar*/
@@ -114,7 +114,7 @@ body.fixed .wrapper {
 /* Content */
 .content {
   padding: 20px 15px;
-  background: #f0f3f4;
+  background: #ffffff;
   overflow: auto;
 }
 /* Utility */
@@ -3549,7 +3549,7 @@ ul.task-list {
 
 /*calendar*/
 .fc-first.fc-last {
-  background-color: #f0f3f4;
+  background-color: #ffffff;
 }
 .external-event {
   font-weight: normal;
@@ -3797,7 +3797,7 @@ ul.online-users {
     padding:15px 15px !important;
 }
 .tab-bg-dark-navy-blue {
-    background:#f0f3f4;
+    background:#ffffff;
     border-radius:5px 5px 0 0;
     -webkit-border-radius:5px 5px 0 0;
     border-bottom:none;

@@ -1,19 +1,16 @@
 package com.xingoo.streaming.monitor.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.xingoo.streaming.monitor.manager.ProcessManager;
 import com.xingoo.streaming.monitor.manager.ResourceManager;
 import com.xingoo.streaming.monitor.manager.Task;
 import com.xingoo.streaming.monitor.service.TaskService;
+import com.xingoo.streaming.monitor.service.YarnService;
 import com.xingoo.streaming.monitor.utils.Response;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.File;
 
 @RestController
 @RequestMapping("task")
@@ -29,6 +26,9 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private YarnService yarnService;
 
     @RequestMapping("start")
     public Response start(String name,
@@ -52,18 +52,44 @@ public class TaskController {
         );
 
         // 保存并启动进程
-        taskService.saveAndStart(task);
+        taskService.save(task);
+        taskService.start(task);
 
         return Response.SUCCESS(taskService.listAll());
     }
 
     @RequestMapping("delete")
     public Response delete(String id){
-        return Response.SUCCESS(taskService.delete(id));
+        Task task = taskService.findOne(id);
+        if("RUNNING".equals(task.getState())){
+            return Response.ERROR("无法删除正在运行的任务");
+        }else{
+            return Response.SUCCESS(taskService.delete(id));
+        }
+    }
+
+    @RequestMapping("stop")
+    public Response stop(String id){
+        return Response.SUCCESS(taskService.stop(id));
     }
 
     @RequestMapping("list")
     public Response list(){
         return Response.SUCCESS(taskService.listAll());
+    }
+
+    @RequestMapping("restart")
+    public Response restart(String id){
+        Task task = taskService.findOne(id);
+        if("RUNNING".equals(task.getState())){
+            return Response.ERROR("正在执行，无法重启");
+        }else{
+            return Response.SUCCESS(taskService.start(task));
+        }
+    }
+
+    @RequestMapping("find")
+    public Response find(String id){
+        return Response.SUCCESS(taskService.findOne(id));
     }
 }
