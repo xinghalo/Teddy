@@ -1,6 +1,7 @@
-# StreamingMonitor
+# Teddy 泰迪
 
 > **项目背景** 公司的spark集群是CDH，暂时不能良好的支持spark2.2的streaming，所以考虑自己写一个监控程序。
+至于为什么要起这样一个名字，一方面公司的项目大多以狗狗的名字命名，另外，自己还养了一只小泰迪（名字叫做  三月），希望自己也能用心的对待这个项目。
 
 ![首页样式](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/Jietu20171228-162819.jpg)
 
