@@ -33,7 +33,15 @@ public class Task implements Serializable{
 
     public Task(){}
 
-    public Task(String name,String clazz,String jar, String jars,String settings, String[] args, String email, Integer is_send_email){
+    public Task(String name,
+                String clazz,
+                String jar,
+                String jars,
+                String settings,
+                String[] args,
+                String email,
+                Integer is_send_email,
+                StreamingConfig config){
 
         this.name = name;
         this.id = this.name+"_"+this.create_time;
@@ -54,11 +62,7 @@ public class Task implements Serializable{
                 + " "
                 + jar
                 + " "
-                + name
-                + " "
-                + id
-                + " "
-                + String.join(" ",args);
+                + config.generateArgs(name,id,args);
     }
 
     @Id

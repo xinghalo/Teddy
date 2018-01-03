@@ -2,6 +2,7 @@ package com.xingoo.streaming.monitor.controller;
 
 import com.xingoo.streaming.monitor.manager.ProcessManager;
 import com.xingoo.streaming.monitor.manager.ResourceManager;
+import com.xingoo.streaming.monitor.manager.StreamingConfig;
 import com.xingoo.streaming.monitor.manager.Task;
 import com.xingoo.streaming.monitor.service.TaskService;
 import com.xingoo.streaming.monitor.service.YarnService;
@@ -9,6 +10,7 @@ import com.xingoo.streaming.monitor.utils.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,9 @@ public class TaskController {
     @Autowired
     private YarnService yarnService;
 
+    @Autowired
+    private StreamingConfig config;
+
     @RequestMapping("start")
     public Response start(String name,
                           String clazz,
@@ -38,6 +43,8 @@ public class TaskController {
                           String email,
                           Integer is_send_email,
                           String[] args){
+
+
 
         // 封装命令
         Task task = new Task(
@@ -48,7 +55,8 @@ public class TaskController {
                 settings,
                 args,
                 email,
-                is_send_email
+                is_send_email,
+                config
         );
 
         // 保存并启动进程
