@@ -1,4 +1,28 @@
 $(function() {
+    // Basic
+    $('.dropify').dropify();
+
+    // Translated
+    $('.dropify-fr').dropify({
+        messages: {
+            'default': '点击或拖拽文件到这里',
+            'replace': '点击或拖拽文件到这里来替换文件',
+            'remove':  '移除文件',
+            'error':   '对不起，你上传的文件太大了'
+        }
+    });
+
+    // Used events
+    var drEvent = $('.dropify-event').dropify();
+
+    drEvent.on('dropify.beforeClear', function(event, element){
+        return confirm("Do you really want to delete \"" + element.filename + "\" ?");
+    });
+
+    drEvent.on('dropify.afterClear', function(event, element){
+        alert('File deleted');
+    });
+
     $.post("/jar/list",{},function(result){
         fileListParser(result);
     });

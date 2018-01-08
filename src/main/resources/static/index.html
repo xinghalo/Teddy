@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>StreamingMonitor</title>
+    <title>Title</title>
     <!-- bootstrap 3.0.2 -->
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- font Awesome -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <!-- Ionicons -->
-    <link href="css/ionicons.min.css" rel="stylesheet" type="text/css" />
-    <!-- Theme style -->
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
     <!-- jQuery 2.0.2 -->
     <script src="js/jquery.min.js" type="text/javascript"></script>
     <!-- jQuery UI 1.10.3 -->
@@ -19,184 +15,57 @@
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
 
 </head>
-<body class="skin-black">
-    <!-- header logo: style can be found in header.less -->
-    <div id="alertDiv" class="alert alert-success alert-dismissable" style="display:none">
-        <button id="alertBtn" type="button" class="close">&times;</button>
-        <p id="alertP"></p>
-    </div>
-    <header class="header">
-        <a href="index.html" class="logo">StreamingMonitor</a>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
-            <!-- Sidebar toggle button-->
-            <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <div class="navbar-right">
+<body>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Teddy</a>
+            </div>
+            <div>
                 <ul class="nav navbar-nav">
-                    <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-user"></i>
-                            <span>Jane Doe <i class="caret"></i></span>
-                        </a>
-                    </li>
+                    <li class="active"><a href="#">任务监控</a></li>
+                    <li><a href="./page/tasks/index.html">任务配置</a></li>
+                    <li><a href="./page/jars/index.html">资源管理</a></li>
+                    <li><a href="#">系统配置（待开发）</a></li>
                 </ul>
             </div>
-        </nav>
-    </header>
-    <div class="wrapper row-offcanvas row-offcanvas-left">
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="left-side sidebar-offcanvas">
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar">
-                <ul id="sidemenu" class="sidebar-menu">
-                    <li class="active" tag="c1" id="c1_menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-dashboard"></i> <span>监控台</span>
-                        </a>
-                    </li>
-                    <li tag="c2">
-                        <a href="javascript:;" >
-                            <i class="fa fa-gavel"></i> <span>任务管理</span>
-                        </a>
-                    </li>
+        </div>
+    </nav>
 
-                    <li tag="c3" id="c3_menu">
-                        <a href="javascript:;">
-                            <i class="fa fa-globe"></i> <span>资源管理</span>
-                        </a>
-                    </li>
-                    <li tag="c4">
-                        <a href="javascript:;">
-                            <i class="fa fa-glass"></i> <span>配置</span>
-                        </a>
-                    </li>
-                </ul>
-            </section>
-            <!-- /.sidebar -->
-        </aside>
-        <aside class="right-side">
-            <!-- Main content -->
-            <section id="c1" class="content">
-                <div class="row" style="margin:20px;">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
+    <div class="panel panel-info" style="margin:20px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">监控操作台</h3>
+        </div>
+        <div class="panel-body">
+            <button type="button" class="btn btn-primary">开始</button>
+            <button type="button" class="btn btn-primary">暂停</button>
+        </div>
+    </div>
 
-                            <th>name</th>
-                            <th>命令</th>
-                            <th>Application_id</th>
-                            <th>状态</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="c1_body">
+    <div class="panel panel-info" style="margin:20px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">任务列表</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
 
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-            <section id="c2" class="content" style="display: none">
-                <div class="row" style="margin:20px;">
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">名字</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="c2NameInput" type="text"  value="test_xingoo">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">jar</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="c2JarInput" type="text" value="streaming.jar">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">class</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="c2ClassInput" type="text" value="com.tgou.data.stanford.streaming.monitor.MonitoringTest">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">args</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="c2ArgsInput" type="text" value="1,2,3">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">email</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" id="c2EmailInput" type="text" value="xinghailong@51tiangou.com">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">是否开启</label>
-                            <div class="col-sm-10">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" class="send-email" name="optionsRadios" id="sendEmail" value="1" checked> 启用
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" class="send-email" name="optionsRadios" id="optionsRadios2" value="0">不启用
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                    <th>name</th>
+                    <th>命令</th>
+                    <th>Application_id</th>
+                    <th>状态</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="c1_body">
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"> </label>
-                            <div class="col-sm-10">
-                                <button type="submit" id="c2SubmitBtn" class="btn btn-default">启动</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </section>
-            <section id="c3" class="content" style="display: none">
-                <div class="row" style="margin:20px;">
-
-                    <div class="form-group">
-                        <label for="inputfile">文件输入</label>
-                        <input type="file" id="inputfile">
-                    </div>
-                    <button id="uploadFileBtn" class="btn btn-default">提交</button>
-
-                </div>
-                <div class="row" style="margin:20px;">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>名称</th>
-                            <th>大小</th>
-                            <th>上传时间</th>
-                            <th>删除</th>
-                        </tr>
-                        </thead>
-                        <tbody id="c3_body">
-
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-            <section id="c4" class="content" style="display: none">
-                配置
-                <div class="row" style="margin-bottom:5px;">
-
-
-
-                </div>
-            </section>
-        </aside><!-- /.right-side -->
-    </div><!-- ./wrapper -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -223,6 +92,6 @@
         </div><!-- /.modal -->
     </div>
 
-    <script src="main.js" type="text/javascript"></script>
+    <script src="./page/taskm/main.js" type="text/javascript"></script>
 </body>
 </html>
