@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- bootstrap 3.0.2 -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- font Awesome -->
-    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- jQuery 2.0.2 -->
-    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="../../js/jquery.min.js" type="text/javascript"></script>
     <!-- jQuery UI 1.10.3 -->
-    <script src="js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+    <script src="../../js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
     <!-- Bootstrap -->
-    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../js/bootstrap.min.js" type="text/javascript"></script>
 
 </head>
 <body>
@@ -23,9 +23,9 @@
             </div>
             <div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">任务监控</a></li>
-                    <li><a href="./page/tasks/index.html">任务配置</a></li>
-                    <li><a href="./page/jars/index.html">资源管理</a></li>
+                    <li><a href="../../new_index.html">任务监控</a></li>
+                    <li><a href="../tasks/index.html">任务配置</a></li>
+                    <li class="active"><a href="#">资源管理</a></li>
                     <li><a href="#">系统配置（待开发）</a></li>
                 </ul>
             </div>
@@ -34,36 +34,33 @@
 
     <div class="panel panel-info" style="margin:20px;">
         <div class="panel-heading">
-            <h3 class="panel-title">监控操作台</h3>
+            <h3 class="panel-title">提交任务</h3>
         </div>
         <div class="panel-body">
-            <button type="button" class="btn btn-primary">开始</button>
-            <button type="button" class="btn btn-primary">暂停</button>
-        </div>
-    </div>
+            <div class="row" style="margin:20px;">
 
-    <div class="panel panel-info" style="margin:20px;">
-        <div class="panel-heading">
-            <h3 class="panel-title">任务列表</h3>
-        </div>
-        <div class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                <tr>
+                <div class="form-group">
+                    <label for="inputfile">文件输入</label>
+                    <input type="file" id="inputfile">
+                </div>
+                <button id="uploadFileBtn" class="btn btn-default">提交</button>
 
-                    <th>name</th>
-                    <th>命令</th>
-                    <th>Application_id</th>
-                    <th>状态</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody id="c1_body">
+            </div>
+            <div class="row" style="margin:20px;">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>大小</th>
+                        <th>上传时间</th>
+                        <th>删除</th>
+                    </tr>
+                    </thead>
+                    <tbody id="c3_body">
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -92,6 +89,6 @@
         </div><!-- /.modal -->
     </div>
 
-    <script src="./page/taskm/main.js" type="text/javascript"></script>
+    <script src="main.js" type="text/javascript"></script>
 </body>
 </html>

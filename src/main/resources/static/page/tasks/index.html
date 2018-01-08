@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- bootstrap 3.0.2 -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- font Awesome -->
+    <link href="../../css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- jQuery 2.0.2 -->
+    <script src="../../js/jquery.min.js" type="text/javascript"></script>
+    <!-- jQuery UI 1.10.3 -->
+    <script src="../../js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="../../js/bootstrap.min.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Teddy</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li><a href="../../new_index.html">任务监控</a></li>
+                    <li class="active"><a href="#">任务配置</a></li>
+                    <li><a href="../jars/index.html">资源管理</a></li>
+                    <li><a href="#">系统配置（待开发）</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="panel panel-info" style="margin:20px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">提交任务</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">名字</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="c2NameInput" type="text"  value="test_xingoo">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">jar</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="c2JarInput" type="text" value="streaming.jar">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">class</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="c2ClassInput" type="text" value="com.tgou.data.stanford.streaming.monitor.MonitoringTest">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">args</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="c2ArgsInput" type="text" value="1,2,3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">email</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="c2EmailInput" type="text" value="xinghailong@51tiangou.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否开启</label>
+                    <div class="col-sm-10">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="send-email" name="optionsRadios" id="sendEmail" value="1" checked> 启用
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="send-email" name="optionsRadios" id="optionsRadios2" value="0">不启用
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"> </label>
+                    <div class="col-sm-10">
+                        <button type="submit" id="c2SubmitBtn" class="btn btn-default">启动</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="info_modal_title">
+
+                    </h4>
+                </div>
+                <div class="modal-body" id="info_modal_body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <!--<button type="button" class="btn btn-primary">
+                        确认
+                    </button>-->
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <script src="main.js" type="text/javascript"></script>
+</body>
+</html>
