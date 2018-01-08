@@ -191,6 +191,13 @@ kill -9 $PID
 - ~~4. 后段去掉基于线程的告警和检测服务~~ 改用ScheduledThreadPoolExecutor代替
 - ~~5. 支持任务的删除停止~~
 
+### 2018-01-08 
+
+- ~~重构前端界面~~
+- ~~增加拖拽上传控件~~ 参考：http://www.htmleaf.com/jQuery/Form/201510142663.html
+
+### 待完成
+
 1. 增加任务界面的轮训查看
 1. 丰富提交任务的界面
 2. 前端框架重构，现在是基于bootstrap+jquery有点乱
