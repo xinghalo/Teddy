@@ -7,7 +7,7 @@ $(function() {
 
     req();
 
-    starter=setInterval(req, 2500);
+    starter=setInterval(req, 1000);
 
     $('#c1_body tr td button.delete').live("click",function(){
         var data = new FormData();
