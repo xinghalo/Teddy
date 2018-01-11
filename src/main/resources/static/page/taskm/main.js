@@ -1,7 +1,13 @@
 $(function() {
-    $.post("/task/list",{},function(response){
-        taskListParser(response);
-    });
+    var req = function () {
+        $.post("/task/list",{},function(response){
+            taskListParser(response);
+        });
+    };
+
+    req();
+
+    starter=setInterval(req, 2500);
 
     $('#c1_body tr td button.delete').live("click",function(){
         var data = new FormData();
@@ -93,7 +99,7 @@ $(function() {
                 html += "<tr id='"+data[i].id+"' "+taskStyle(data[i].state)+">";
                 html += "<td>"+data[i].name+"</td>";
                 html += "<td><button type='button' class='btn btn-default command'>查看配置</button></td>";
-                html += "<td><a href='"+data[i].web_url+"'>"+data[i].application_id+"</a></td>";
+                html += "<td><a href='"+data[i].web_url+"' target='_blank'>"+data[i].application_id+"</a></td>";
                 html += "<td>"+data[i].state+"</td>";
                 html += "<td><button type='button' class='btn btn-default delete'>删除</button></td>";
                 html += "<td><button type='button' class='btn btn-default stop'>停止</button></td>";

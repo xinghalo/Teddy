@@ -1,7 +1,14 @@
 $(function() {
-    $.post("/task/list",{},function(response){
-        taskListParser(response);
-    });
+    
+    var req = function () {
+        $.post("/task/list",{},function(response){
+            taskListParser(response);
+        });
+    };
+
+    req();
+    
+    starter=setInterval(req, 5000);
 
     // 菜单页面跳转
     $('#sidemenu li').live("click",function(){
