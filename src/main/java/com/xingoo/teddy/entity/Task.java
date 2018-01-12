@@ -1,4 +1,4 @@
-package com.xingoo.teddy.manager;
+package com.xingoo.teddy.entity;
 
 
 import org.apache.commons.lang3.StringUtils;

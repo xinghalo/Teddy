@@ -1,7 +1,7 @@
 package com.xingoo.teddy.service;
 
 import com.xingoo.teddy.manager.ProcessManager;
-import com.xingoo.teddy.manager.Task;
+import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.mapper.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

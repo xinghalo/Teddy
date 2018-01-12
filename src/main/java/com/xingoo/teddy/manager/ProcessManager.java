@@ -1,5 +1,6 @@
 package com.xingoo.teddy.manager;
 
+import com.xingoo.teddy.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

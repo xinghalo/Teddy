@@ -2,7 +2,7 @@ package com.xingoo.teddy.controller;
 
 import com.xingoo.teddy.manager.ProcessManager;
 import com.xingoo.teddy.manager.ResourceManager;
-import com.xingoo.teddy.manager.Task;
+import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.service.TaskService;
 import com.xingoo.teddy.service.YarnService;
 import com.xingoo.teddy.utils.Response;

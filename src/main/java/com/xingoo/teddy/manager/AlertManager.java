@@ -1,5 +1,6 @@
 package com.xingoo.teddy.manager;
 
+import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.service.TaskService;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;

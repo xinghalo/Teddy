@@ -1,6 +1,6 @@
 package com.xingoo.teddy.mapper;
 
-import com.xingoo.teddy.manager.Task;
+import com.xingoo.teddy.entity.Task;
 import org.apache.ibatis.annotations.*;
 
 import java.sql.Date;
