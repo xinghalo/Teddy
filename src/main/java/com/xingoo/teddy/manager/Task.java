@@ -33,7 +33,7 @@ public class Task implements Serializable{
                 String jar,
                 String jars,
                 String settings,
-                String[] args,
+                String args,
                 String email,
                 Integer send){
 
@@ -55,8 +55,10 @@ public class Task implements Serializable{
                 + clazz
                 + " "
                 + jar
-                + " ";
-                //+ config.generateArgs(name,id,args);
+                + " "
+                + this.id
+                + " "
+                + args;
     }
 
     public String getId() {

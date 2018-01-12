@@ -72,4 +72,8 @@ public class TaskService {
     public void updateStateById(String id, String state, Date modifyTime){
         mapper.updateStateById(id,state,modifyTime);
     }
+
+    public void update(String id, String state, Date modifyTime, String applicationId){
+        mapper.update(id,state,modifyTime,applicationId);
+    }
 }

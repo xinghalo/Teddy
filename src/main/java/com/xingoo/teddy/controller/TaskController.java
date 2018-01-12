@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
+
 @RestController
 @RequestMapping("task")
 public class TaskController {
@@ -36,10 +38,8 @@ public class TaskController {
                           String jar,
                           String settings,
                           String email,
-                          Integer is_send_email,
-                          String[] args){
-
-
+                          Integer send,
+                          String args){
 
         // 封装命令
         Task task = new Task(
@@ -50,7 +50,7 @@ public class TaskController {
                 settings,
                 args,
                 email,
-                is_send_email
+                send
         );
 
         // 保存并启动进程
@@ -93,5 +93,10 @@ public class TaskController {
     @RequestMapping("find")
     public Response find(String id){
         return Response.SUCCESS(taskService.findOne(id));
+    }
+
+    @RequestMapping("update")
+    public void update(String applicationId,String taskId, String state){
+        taskService.update(taskId,state,new Date(System.currentTimeMillis()),applicationId);
     }
 }

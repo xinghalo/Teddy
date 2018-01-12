@@ -27,7 +27,9 @@ public interface TaskMapper {
     void create();
 
     @Update("update task t set t.state = #{state}, t.modify_time = #{now} where t.id = #{id}")
-    void updateStateById(@Param("id")String id, @Param("state") String state, @Param("now") Date now);
+    void updateStateById(@Param("id")    String id,
+                         @Param("state") String state,
+                         @Param("now")   Date now);
 
     @Select("select * from task where application_id is not null")
     List<Task> findAllByApplicationId();
@@ -44,4 +46,10 @@ public interface TaskMapper {
 
     @Delete("delete from task where id = #{id}")
     void delete(@Param("id") String id);
+
+    @Update("update task set state=#{state}, modify_time=#{mt}, application_id=#{appid} where id = #{id}")
+    void update(@Param("id")    String  id,
+                @Param("state") String  state,
+                @Param("mt")    Date    modifyTime,
+                @Param("appid") String  applicationId);
 }
