@@ -69,11 +69,20 @@ public class TaskService {
         return mapper.findAllByApplicationId();
     }
 
-    public void updateStateById(String id, String state, Date modifyTime){
-        mapper.updateStateById(id,state,modifyTime);
+    public void updateStateById(String id, String state, Date modifyTime,String application_id){
+        mapper.updateStateById(id,state,modifyTime,application_id);
     }
 
     public void update(String id, String state, Date modifyTime, String applicationId){
         mapper.update(id,state,modifyTime,applicationId);
+    }
+
+    public void register(String taskId,String appId, String state, String url){
+        mapper.register(taskId,appId,state,url,new Date(System.currentTimeMillis()));
+    }
+
+
+    public void restart(String id,Integer count) throws Exception{
+        mapper.restart(id,count);
     }
 }

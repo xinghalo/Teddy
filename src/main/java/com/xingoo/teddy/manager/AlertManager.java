@@ -2,6 +2,7 @@ package com.xingoo.teddy.manager;
 
 import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.service.TaskService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +41,12 @@ public class AlertManager implements ApplicationRunner {
         scheduledThreadPool.scheduleAtFixedRate(()->{
             List<Task> tasks = taskService.listAll();
             tasks.forEach(t -> {
-                if(t.getState()!=null && !"RUNNING".equals(t.getState()) && t.getSend()==1){
+                if(StringUtils.isNotBlank(t.getState())
+                    && !"RUNNING".equals(t.getState())
+                    && t.getSend()==1){
+
                     emailSender.send(t.getEmail(),t.getName()+"状态异常",t.getCommand()+"<br>"+t.getWeb_url());
+
                 }
             });
         },0,alertInterval, TimeUnit.SECONDS);

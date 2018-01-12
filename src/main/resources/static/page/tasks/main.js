@@ -8,6 +8,7 @@ $(function() {
         data.append("args", $('#c2ArgsInput').val());
         data.append("email",$('#c2EmailInput').val());
         data.append("send",$('input.send-email:radio:checked').val());
+        data.append("restart",$('input.restart:radio:checked').val());
 
         $.ajax({
             url: "/task/start",
@@ -20,7 +21,6 @@ $(function() {
                     $('#alertDiv').css("display","block");
                     $('#alertP').text('任务提交成功');
                 }
-                //taskListParser(result);
             }
         });
     });

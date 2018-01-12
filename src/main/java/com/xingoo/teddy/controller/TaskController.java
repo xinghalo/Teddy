@@ -1,22 +1,28 @@
 package com.xingoo.teddy.controller;
 
+import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.manager.ProcessManager;
 import com.xingoo.teddy.manager.ResourceManager;
-import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.service.TaskService;
 import com.xingoo.teddy.service.YarnService;
 import com.xingoo.teddy.utils.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Date;
 
 @RestController
 @RequestMapping("task")
 public class TaskController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${register.url}")
+    private String register;
 
     @Autowired
     private ProcessManager processManager;
@@ -36,8 +42,9 @@ public class TaskController {
                           String jar,
                           String settings,
                           String email,
-                          Integer is_send_email,
-                          String[] args){
+                          Integer send,
+                          Integer restart,
+                          String args){
 
 
 
@@ -48,9 +55,10 @@ public class TaskController {
                 resourceManager.getJar(jar),
                 resourceManager.getCommandJars(jar),
                 settings,
-                args,
+                args+" "+register,
                 email,
-                is_send_email
+                send,
+                restart
         );
 
         // 保存并启动进程
@@ -93,5 +101,16 @@ public class TaskController {
     @RequestMapping("find")
     public Response find(String id){
         return Response.SUCCESS(taskService.findOne(id));
+    }
+
+    @RequestMapping("update")
+    public void update(String taskId,String appId,String state){
+        taskService.update(taskId,state,new Date(System.currentTimeMillis()),appId);
+    }
+
+    @RequestMapping("register")
+    public Response register(String taskId,String appId,String state,String url){
+        taskService.register(taskId,appId,state,url);
+        return Response.SUCCESS(null);
     }
 }

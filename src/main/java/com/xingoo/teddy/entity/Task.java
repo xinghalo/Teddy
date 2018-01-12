@@ -25,6 +25,8 @@ public class Task implements Serializable{
     private Date modify_time;
     private String email;
     private Integer send;
+    private Integer restart;
+    private Integer restart_count = 3;
 
     public Task(){}
 
@@ -33,14 +35,16 @@ public class Task implements Serializable{
                 String jar,
                 String jars,
                 String settings,
-                String[] args,
+                String args,
                 String email,
-                Integer send){
+                Integer send,
+                Integer restart){
 
         this.name = name;
         this.id = this.name+"_"+this.create_time;
         this.email = email;
         this.send = send;
+        this.restart = restart;
 
         //默认配置
         if(StringUtils.isBlank(settings)){
@@ -55,8 +59,24 @@ public class Task implements Serializable{
                 + clazz
                 + " "
                 + jar
-                + " ";
-                //+ config.generateArgs(name,id,args);
+                + " "
+                + args+ " "+ this.id;
+    }
+
+    public Integer getRestart() {
+        return restart;
+    }
+
+    public void setRestart(Integer restart) {
+        this.restart = restart;
+    }
+
+    public Integer getRestart_count() {
+        return restart_count;
+    }
+
+    public void setRestart_count(Integer restart_count) {
+        this.restart_count = restart_count;
     }
 
     public String getId() {

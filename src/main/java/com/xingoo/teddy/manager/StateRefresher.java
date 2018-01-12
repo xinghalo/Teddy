@@ -45,7 +45,7 @@ public class StateRefresher implements ApplicationRunner {
             logger.info("监测到" + task.size() + "条appid不为空的task");
             task.forEach(t -> {
                 String state = yarnService.state(t.getApplication_id());
-                taskService.updateStateById(t.getId(), state, new Date(System.currentTimeMillis()));
+                taskService.updateStateById(t.getId(), state, new Date(System.currentTimeMillis()),t.getApplication_id());
                 logger.info("更新" + t.getId() + "的状态信息为：" + state);
             });
         },0,stateRefreshInterval, TimeUnit.SECONDS);
