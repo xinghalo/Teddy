@@ -3,102 +3,109 @@
 > **项目背景** 公司的spark集群是CDH，暂时不能良好的支持spark2.2的streaming，所以考虑自己写一个监控程序。
 至于为什么要起这样一个名字，一方面公司的项目大多以狗狗的名字命名，另外，自己还养了一只小泰迪（名字叫做  三月），希望自己也能用心的对待这个项目。
 
-![首页样式](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/Jietu20171228-162819.jpg)
+## 主要功能
+
+1. Streaming任务部署
+2. 任务监控与告警
+3. 任务自启动
+
+## 效果展示
+
+![首页](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/1.jpg)
+![任务配置](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/2.jpg)
+![jar包管理](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/3.jpg)
 
 ## 使用说明
 
-### 1 创建表结构
-```sql
-create table `streaming_task`(
-  `id`              varchar(100)  not null,
-  `name`            varchar(200)  not null comment '任务名字',
-  `command`         varchar(3000) not null comment '启动命令',
-  `create_time`     long          not null comment '修改时间',
-  `application_id`  varchar(200)  comment 'spark应用id',
-  `web_url`         varchar(200)  comment 'url',
-  `state`           varchar(20)   comment '状态',
-  `email`           varchar(500)  comment '邮件',
-  `is_send_email`   int(10)       comment '是否发送邮件',
-  `modify_time`     timestamp     not null comment '修改时间',
-  PRIMARY KEY (`id`)
-)ENGINE=INNODB  DEFAULT CHARSET=utf8 COMMENT='streaming任务表';
+### 1 主要需要注意的参数
+
 ```
+# 发布地址
+server.address=0.0.0.0
+server.port=18081
+
+# 注册地址
+register.url=http://hnode10:18081/task/register
+
+# jar包上传目录
+com.xingoo.streaming.monitor.resource.path=/home/xinghailong/monitor/lib/
+
+# 告警时间配置，秒单位，默认一分钟
+alert.interval=60
+
+# 状态刷新时间配置，秒单位，默认5秒钟
+state.refresh.interval=10
+
+# 自动重启间隔时间，3分钟
+auto.restart.interval=60
+
+# derby数据库url
+spring.datasource.url=jdbc:derby:/home/xinghailong/monitor/db;create=true  
+```
+
 ### 2 在Streaming代码中加入下面的处理逻辑
 
 ```scala
-import java.sql.DriverManager
-
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Duration, StreamingContext}
 
 /**
-  * 这个类用于关联穿入的task_id与application_id，因此需要强制占用几个参数：
-  *
-  * 0:  app_name        应用名字
-  * 1:  task_id         任务id
-  * 2:  default_web_ui  默认的url
-  * 3:  class_name      驱动类的名字
-  * 4:  jdbc_url        数据库的url
-  * 5:  jdbc_user       数据库的用户名
-  * 6:  jdbc_passwd     数据库的密码
-  *
+  * 注册SparkStreaming
   */
 object StreamingMonitor{
 
-  def createContext(args:Array[String],duration:Duration):StreamingContext = {
-    println("*************** 创建StreamingContext begin **************")
+  /**
+    * 创建streamingContext
+    *
+    * @param args     参数
+    * @param duration 窗口
+    * @param name     名字
+    * @return
+    */
+  def createContext(args:Array[String],duration:Duration,name:String):StreamingContext = {
+    val sparkConf = new SparkConf().setAppName(name)
+    createContext(args,sparkConf,duration)
+  }
 
-    args.foreach(println(_))
+  /**
+    * 创建streamingContext
+    *
+    * @param args     参数
+    * @param conf     配置
+    * @param duration 窗口
+    * @return
+    */
+  def createContext(args:Array[String], conf: SparkConf, duration:Duration):StreamingContext = {
+    println("*************** register begin **************")
 
-    if(args.length < 7) throw new IllegalArgumentException
-
-    val app_name        = args(0)
-    val task_id         = args(1)
-    val default_web_ui  = args(2)
-    val class_name      = args(3)
-    val jdbc_url        = args(4)
-    val jdbc_user       = args(5)
-    val jdbc_passwd     = args(6)
-
+    println("args:")
+    args.foreach(println)
+    println()
 
     System.setProperty("hive.metastore.uris", "thrift://hnode1:9083")
 
-    val sparkConf = new SparkConf().setAppName(args(0))
-    val ssc = new StreamingContext(sparkConf,duration)
+    val ssc = new StreamingContext(conf,duration)
     ssc.sparkContext.setLogLevel("warn")
 
-    val app_id = ssc.sparkContext.applicationId
-    val web_url = ssc.sparkContext.uiWebUrl.getOrElse(s"'$default_web_ui'")
+    val appId = ssc.sparkContext.applicationId
+    val url = ssc.sparkContext.uiWebUrl.get
+    val taskId = args(args.length-1)
+    val register = args(args.length-2)
 
-    // 连接数据库写入application_id等信息
-    updateAppId(app_id, web_url, args(1))
+    val httpUrl = s"$register?taskId=$taskId&appId=$appId&state=REGISTER&url=$url"
 
-    println("*************** 创建StreamingContext end **************")
+    println(s"注册URL地址为:$httpUrl")
+
+    val response = new DefaultHttpClient().execute(new HttpGet(httpUrl))
+    if(response.getStatusLine.getStatusCode!=200){
+      throw new Exception("注册失败")
+    }
+
+    println("*************** register end **************")
 
     ssc
-  }
-
-  def updateAppId(app_id:String, web_url:String, task_id:String): Unit ={
-    Class.forName("com.mysql.jdbc.Driver")
-    val conn = DriverManager.getConnection("jdbc:mysql://10.10.5.11:3306/recommend", "xinhailong", "test!@3$xhl")
-    val stmt = conn.createStatement
-
-    val sql=
-      s"""
-         |update
-         |  streaming_task
-         |set
-         |  application_id  = '$app_id',
-         |  web_url         = '$web_url',
-         |  state           = 'DRIVER_INIT'
-         |where id = '$task_id'
-         """.stripMargin
-
-    println(sql)
-
-    val count = stmt.executeUpdate(sql)
-    if(count != 1) throw new IllegalStateException("向streaming_task表中写入app_id失败，请查看相关表，是否存在task_id")
-    conn.close()
   }
 
 }
@@ -115,7 +122,7 @@ import org.apache.spark.streaming.kafka.KafkaUtils
 object MonitoringTest {
   def main(args: Array[String]): Unit = {
 
-    val ssc = StreamingMonitor.createContext(args,Seconds(5))
+    val ssc = StreamingMonitor.createContext(args,Seconds(5), "MonitoringTest")
 
     // Create direct kafka stream with brokers and topics
     val kafkaParams = Map[String, String](
@@ -151,21 +158,20 @@ def main(args: Array[String]): Unit = {
     * 1. 创建StreamingContext，并完成注册的监控                      *
     * ************************************************************/
 
-    val ssc = StreamingMonitor.createContext(args,WINDOW_TIME)
+    val ssc = StreamingMonitor.createContext(args,WINDOW_TIME,MonitoringTest)
     ...
 ```
 ### 3 启动StreamingMonitor
 
 start.sh
 ```sbtshell
-nohup java -jar streaming-monitor.jar &
+nohup java -jar teddy.jar &
 ```
 
 stop.sh
 ```sbtshell
 #!/bin/bash
-# https://www.cnblogs.com/lovychen/p/6211209.html
-PID=`ps -ef | grep streaming-monitor|grep -v grep | awk '{print $2}'`
+PID=`ps -ef | grep teddy|grep -v grep | awk '{print $2}'`
 kill -9 $PID
 ```
 
@@ -173,7 +179,9 @@ kill -9 $PID
 
 点击任务管理，配置任务即可。
 
-## 2017-12-27
+## 开发进度
+
+### 2017-12-27
 
 基于yarn的spark streaming任务管理服务，支持一下功能：
 
@@ -182,8 +190,6 @@ kill -9 $PID
 3. streaming异常检测与邮件告警
 
 前端参考：http://www.cssmoban.com/cssthemes/6836.shtml
-
-## 开发中..特性
 
 ### 2017-12-28 进度
 
@@ -196,18 +202,19 @@ kill -9 $PID
 - ~~重构前端界面~~
 - ~~增加拖拽上传控件~~ 参考：http://www.htmleaf.com/jQuery/Form/201510142663.html
 
+### 2018-01-12
+
+- 增加任务界面的轮训查看
+- 丰富提交任务的界面
+- 前端框架重构，现在是基于bootstrap+jquery有点乱
+- 增加使用说明文档
+- 底层基于derby+mybatis+druid
+- 支持任务自动重启
+
 ### 待完成
 
-1. 增加任务界面的轮训查看
-1. 丰富提交任务的界面
-2. 前端框架重构，现在是基于bootstrap+jquery有点乱
 3. 丰富告警类型
 4. 支持在线streaming无缝升级
-5. 增加使用说明文档
-
-## 笔记
-
-spark streaming基于yarn的任务状态查询：http://ip:port/ws/v1/cluster/apps/application_1509601523778_68428
 
 ## 链接
 
@@ -218,3 +225,6 @@ spark streaming基于yarn的任务状态查询：http://ip:port/ws/v1/cluster/ap
 5. [apache hadoop yarn](https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/NodeManagerRest.html#Application_API)
 6. [jquery插件](http://www.jq22.com/jquery-plugins%E5%9E%82%E7%9B%B4%E5%AF%BC%E8%88%AA-1-jq)
 7. [spark](http://spark.apache.org/docs/latest/)
+8. [DERBY快速指南](http://db.apache.org/derby/docs/10.14/getstart/index.html)
+9. [derby用户手册](http://db.apache.org/derby/docs/10.14/ref/index.html)
+10. [derby开发者指南](http://db.apache.org/derby/docs/10.14/devguide/index.html)
