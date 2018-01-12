@@ -2,7 +2,7 @@ package com.xingoo.teddy.service;
 
 import com.xingoo.teddy.manager.ProcessManager;
 import com.xingoo.teddy.manager.Task;
-import com.xingoo.teddy.mapper.TaskMapper;
+import com.xingoo.teddy.mapper.JobMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,36 +13,18 @@ import java.util.List;
 public class TaskService {
 
     @Autowired
-    private TaskMapper mapper;
+    private JobMapper jobMapper;
 
     @Autowired
     private ProcessManager processManager;
 
-    /**
-     * 创建task表
-     */
-    public void create(){
-        mapper.create();
-    }
-
-    /**
-     * 查询表的个数，用于判断表是否存在
-     * @return 如果表不存在则为-1
-     */
-    public Integer count() {
-        try {
-            return mapper.count();
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
     public Task findOne(String id) {
-        return mapper.findOne(id);
+//        return jobMapper.findOne(id);
+        return null;
     }
 
     public void save(Task task){
-        mapper.save(task);
+//        jobMapper.save(task);
     }
 
     public List<Task> start(Task task){
@@ -51,29 +33,33 @@ public class TaskService {
     }
 
     public List<Task> listAll(){ ;
-        return mapper.findAll();
+//        return jobMapper.findAll();
+        return null;
     }
 
     public List<Task> delete(String id){
-        mapper.delete(id);
-        return mapper.findAll();
+        jobMapper.delete(id);
+//        return jobMapper.findAll();
+        return null;
     }
 
     public List<Task> stop(String id) {
-        Task task = mapper.findOne(id);
-        processManager.stop(task);
-        return mapper.findAll();
+//        Task task = jobMapper.findOne(id);
+//        processManager.stop(task);
+//        return jobMapper.findAll();
+        return null;
     }
 
     public List<Task> findAllByApplicationId(){
-        return mapper.findAllByApplicationId();
+//        return jobMapper.findAllByApplicationId();
+        return null;
     }
 
     public void updateStateById(String id, String state, Date modifyTime){
-        mapper.updateStateById(id,state,modifyTime);
+        jobMapper.updateStateById(id,state,modifyTime);
     }
 
     public void update(String id, String state, Date modifyTime, String applicationId){
-        mapper.update(id,state,modifyTime,applicationId);
+        jobMapper.update(id,state,modifyTime,applicationId);
     }
 }

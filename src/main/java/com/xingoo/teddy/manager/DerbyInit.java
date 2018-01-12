@@ -1,5 +1,7 @@
 package com.xingoo.teddy.manager;
 
+import com.xingoo.teddy.entity.Restart;
+import com.xingoo.teddy.mapper.*;
 import com.xingoo.teddy.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +16,37 @@ public class DerbyInit implements ApplicationRunner {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private TaskService taskService;
+    private TaskMapper taskMapper;
+
+    @Autowired
+    private ConfigMapper configMapper;
+
+    @Autowired
+    private JobMapper jobMapper;
+
+    @Autowired
+    private AlertMapper alertMapper;
+
+    @Autowired
+    private RestartMapper restartMapper;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        logger.info("check db env ...");
-        if (taskService.count() < 0) {
-            logger.info("create table task.");
-            taskService.create();
 
+        try {
+            logger.info("check derby table.");
+            jobMapper.count();
+        } catch (Exception e){
+            logger.info("create table job.");
+            jobMapper.create();
+            logger.info("create table task.");
+            taskMapper.create();
+            logger.info("create table config.");
+            configMapper.create();
+            logger.info("create table alert.");
+            alertMapper.create();
+            logger.info("create table restart.");
+            restartMapper.create();
         }
     }
 }
