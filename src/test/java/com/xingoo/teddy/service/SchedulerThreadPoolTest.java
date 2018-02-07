@@ -1,10 +1,15 @@
 package com.xingoo.teddy.service;
 
+import com.xingoo.teddy.entity.Task;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class SchedulerThreadPoolTest {
@@ -72,6 +77,27 @@ public class SchedulerThreadPoolTest {
 
 //        try {
 //            this.wait();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    @Test
+    public void test4(){
+        ScheduledExecutorService scheduledThreadPool = new ScheduledThreadPoolExecutor(1,
+                new BasicThreadFactory.Builder().namingPattern("alert-pool-%d").daemon(true).build());
+
+        scheduledThreadPool.scheduleAtFixedRate(()->{
+            try {
+                System.out.println("11111111");
+                int a = 1 / 0;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        },0,3, TimeUnit.SECONDS);
+
+//        try {
+//            Thread.sleep(99999);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }

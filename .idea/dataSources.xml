@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="db1" uuid="f79685db-e30a-49b3-9747-6528625377cb">
+      <driver-ref>derby.embedded</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.apache.derby.jdbc.EmbeddedDriver</jdbc-driver>
+      <jdbc-url>jdbc:derby:$PROJECT_DIR$/../db1;create=true</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="db" uuid="71343585-adfa-4769-a154-9902c5d8cd03">
+      <driver-ref>derby.embedded</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.apache.derby.jdbc.EmbeddedDriver</jdbc-driver>
+      <jdbc-url>jdbc:derby:$PROJECT_DIR$/../db;create=true</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="jdbc:derby://localhost:1527/" uuid="21b13bcf-fb27-46ea-8f0a-dd37aa8ded7d">
+      <driver-ref>derby.remote</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.apache.derby.jdbc.ClientDriver</jdbc-driver>
+      <jdbc-url>jdbc:derby://localhost:1527/</jdbc-url>
+    </data-source>
+  </component>
+</project>

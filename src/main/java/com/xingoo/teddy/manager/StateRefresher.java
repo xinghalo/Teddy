@@ -41,13 +41,17 @@ public class StateRefresher implements ApplicationRunner {
 
         // 线程池代替单个线程的创建，提供更好的复用性与可控性
         scheduledThreadPool.scheduleAtFixedRate(()->{
-            List<Task> task = taskService.findAllByApplicationId();
-            logger.info("监测到" + task.size() + "条appid不为空的task");
-            task.forEach(t -> {
-                String state = yarnService.state(t.getApplication_id());
-                taskService.updateStateById(t.getId(), state, new Date(System.currentTimeMillis()),t.getApplication_id());
-                logger.info("更新" + t.getId() + "的状态信息为：" + state);
-            });
+            try {
+                List<Task> task = taskService.findAllByApplicationId();
+                logger.info("监测到" + task.size() + "条appid不为空的task");
+                task.forEach(t -> {
+                    String state = yarnService.state(t.getApplication_id());
+                    taskService.updateStateById(t.getId(), state, new Date(System.currentTimeMillis()), t.getApplication_id());
+                    logger.info("更新" + t.getId() + "的状态信息为：" + state);
+                });
+            }catch (Exception e){
+                logger.error(e.getMessage());
+            }
         },0,stateRefreshInterval, TimeUnit.SECONDS);
     }
 }

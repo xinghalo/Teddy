@@ -72,9 +72,9 @@ public class EmailSender {
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
 
-            logger.info("成功发送邮件：-->"+email+"["+subject+"]"+text);
+            logger.info("email success：-->"+email+"["+subject+"]"+text);
         }catch(Exception e){
-            logger.error("邮件发送异常，"+e.getMessage());
+            logger.error("email error，"+e.getMessage());
         }
     }
 }

@@ -40,22 +40,26 @@ public class RestartManager implements ApplicationRunner {
         logger.info("start restarter");
 
         scheduledThreadPool.scheduleAtFixedRate(()->{
-            List<Task> tasks = taskService.listAll();
-            logger.info("扫描到"+tasks.size()+"个任务需要检测是否重启");
-            tasks.forEach(t -> {
-                if(StringUtils.isNotBlank(t.getState())
-                && !"RUNNING".equals(t.getState())
-                && t.getRestart().equals(1)
-                && t.getRestart_count()>0){
-                    try {
-                        logger.info("尝试重启task:"+ t.getId()+",剩余次数:"+t.getRestart_count());
-                        taskService.restart(t.getId(),t.getRestart_count()-1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            try {
+                List<Task> tasks = taskService.listAll();
+                logger.info("扫描到" + tasks.size() + "个任务需要检测是否重启");
+                tasks.forEach(t -> {
+                    if (StringUtils.isNotBlank(t.getState())
+                            && !"RUNNING".equals(t.getState())
+                            && t.getRestart().equals(1)
+                            && t.getRestart_count() > 0) {
+                        try {
+                            logger.info("尝试重启task:" + t.getId() + ",剩余次数:" + t.getRestart_count());
+                            taskService.restart(t.getId(), t.getRestart_count() - 1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        processManager.start(t);
                     }
-                    processManager.start(t);
-                }
-            });
+                });
+            }catch (Exception e){
+                logger.error(e.getMessage());
+            }
         },0,autoRestartInterval, TimeUnit.SECONDS);
     }
 }

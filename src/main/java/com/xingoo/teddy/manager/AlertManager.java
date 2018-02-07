@@ -39,16 +39,20 @@ public class AlertManager implements ApplicationRunner {
         logger.info("启动 告警服务 线程");
 
         scheduledThreadPool.scheduleAtFixedRate(()->{
-            List<Task> tasks = taskService.listAll();
-            tasks.forEach(t -> {
-                if(StringUtils.isNotBlank(t.getState())
-                    && !"RUNNING".equals(t.getState())
-                    && t.getSend()==1){
+            try {
+                List<Task> tasks = taskService.listAll();
+                tasks.forEach(t -> {
+                    if (StringUtils.isNotBlank(t.getState())
+                            && !"RUNNING".equals(t.getState())
+                            && t.getSend() == 1) {
 
-                    emailSender.send(t.getEmail(),t.getName()+"状态异常",t.getCommand()+"<br>"+t.getWeb_url());
+                        emailSender.send(t.getEmail(), t.getName() + "状态异常", t.getCommand() + "<br>" + t.getWeb_url());
 
-                }
-            });
+                    }
+                });
+            }catch(Exception e){
+                logger.error(e.getMessage());
+            }
         },0,alertInterval, TimeUnit.SECONDS);
     }
 }
