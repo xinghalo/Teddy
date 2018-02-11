@@ -15,7 +15,7 @@ public class YarnService {
 
     private CloseableHttpClient httpclient = HttpClients.createDefault();
     public static final String URL = "http://hnode2:8088/ws/v1/cluster/apps/";
-
+    public static final String URL_R = "http://hnode1:8088/ws/v1/cluster/apps/";
     /**
      * https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html#Cluster_Application_State_API
      * @return
@@ -31,7 +31,16 @@ public class YarnService {
                 return JSON.parseObject(content).getString("state");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            httpGet = new HttpGet(URL_R+ app_id + "/state");
+            try {
+                resp = httpclient.execute(httpGet);
+                if (resp.getStatusLine().getStatusCode() == 200) {
+                    String content = IOUtils.toString(resp.getEntity().getContent());
+                    return JSON.parseObject(content).getString("state");
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }finally {
             if(resp!=null){
                 try {
