@@ -1,5 +1,6 @@
 package com.xingoo.teddy.manager;
 
+import com.xingoo.teddy.service.JobService;
 import com.xingoo.teddy.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ public class DerbyInit implements ApplicationRunner {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private JobService jobService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("check db env ...");
@@ -24,5 +28,8 @@ public class DerbyInit implements ApplicationRunner {
             taskService.create();
 
         }
+
+        logger.info("check table job env ...");
+
     }
 }
