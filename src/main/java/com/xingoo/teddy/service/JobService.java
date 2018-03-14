@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class JobService {
@@ -23,10 +24,10 @@ public class JobService {
                 .setAppName(job.getName())
                 .setSparkHome(TeddyConf.get("spark.home"))
                 .setMaster(job.getMaster())
-                .setAppResource(job.getAppResource())
-                .setMainClass(job.getMainClass())
-                .addAppArgs(job.getAppArgs())
-                .setDeployMode(job.getDeployMode());
+                .setAppResource(job.getApp_resource())
+                .setMainClass(job.getMain_class())
+                .addAppArgs(job.getArgs())
+                .setDeployMode(job.getDeploy_mode());
 
         String settings = job.getConfig();
         for(String setting : StringUtils.splitByWholeSeparator(settings,";")){
@@ -66,4 +67,15 @@ public class JobService {
             return -1;
         }
     }
+
+    public List<Job> list(Integer page, Integer size){
+        return jobMapper.list((page-1)*size,size);
+    }
+
+    public void save(Job job){
+        jobMapper.save(job);
+    }
+
+
+
 }

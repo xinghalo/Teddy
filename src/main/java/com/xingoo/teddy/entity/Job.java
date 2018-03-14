@@ -3,26 +3,18 @@ package com.xingoo.teddy.entity;
 public class Job {
     private Integer id;
     private String name;
-    private String applicationId;
+    private String app_id;
     private String state;
-    private String appResource;
-    private String mainClass;
+    private String app_resource;
+    private String main_class;
     private String master;
-    private String deployMode;
-    private String appArgs;
+    private String deploy_mode;
+    private String args;
     private String config;
     private String email;
     private Integer send;
     private Integer restart;
     private Integer retries;
-
-    public String getDeployMode() {
-        return deployMode;
-    }
-
-    public void setDeployMode(String deployMode) {
-        this.deployMode = deployMode;
-    }
 
     public Integer getId() {
         return id;
@@ -30,14 +22,6 @@ public class Job {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getMaster() {
-        return master;
-    }
-
-    public void setMaster(String master) {
-        this.master = master;
     }
 
     public String getName() {
@@ -48,12 +32,12 @@ public class Job {
         this.name = name;
     }
 
-    public String getApplicationId() {
-        return applicationId;
+    public String getApp_id() {
+        return app_id;
     }
 
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+    public void setApp_id(String app_id) {
+        this.app_id = app_id;
     }
 
     public String getState() {
@@ -64,28 +48,44 @@ public class Job {
         this.state = state;
     }
 
-    public String getAppResource() {
-        return appResource;
+    public String getApp_resource() {
+        return app_resource;
     }
 
-    public void setAppResource(String appResource) {
-        this.appResource = appResource;
+    public void setApp_resource(String app_resource) {
+        this.app_resource = app_resource;
     }
 
-    public String getMainClass() {
-        return mainClass;
+    public String getMain_class() {
+        return main_class;
     }
 
-    public void setMainClass(String mainClass) {
-        this.mainClass = mainClass;
+    public void setMain_class(String main_class) {
+        this.main_class = main_class;
     }
 
-    public String getAppArgs() {
-        return appArgs;
+    public String getMaster() {
+        return master;
     }
 
-    public void setAppArgs(String appArgs) {
-        this.appArgs = appArgs;
+    public void setMaster(String master) {
+        this.master = master;
+    }
+
+    public String getDeploy_mode() {
+        return deploy_mode;
+    }
+
+    public void setDeploy_mode(String deploy_mode) {
+        this.deploy_mode = deploy_mode;
+    }
+
+    public String getArgs() {
+        return args;
+    }
+
+    public void setArgs(String args) {
+        this.args = args;
     }
 
     public String getConfig() {

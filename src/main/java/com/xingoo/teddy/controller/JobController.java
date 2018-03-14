@@ -39,4 +39,15 @@ public class JobController {
         return Response.SUCCESS("ok");
     }
 
+    @RequestMapping("list")
+    public Response list(Integer page, Integer size){
+        return Response.SUCCESS(jobService.list(page,size));
+    }
+
+    @RequestMapping("submit")
+    public Response submit(@RequestBody Job job){
+
+        return Response.SUCCESS(jobService.list(1,20));
+    }
+
 }

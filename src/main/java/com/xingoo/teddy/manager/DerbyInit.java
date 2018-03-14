@@ -30,6 +30,9 @@ public class DerbyInit implements ApplicationRunner {
         }
 
         logger.info("check table job env ...");
-
+        if(jobService.count() < 0){
+            logger.info("create table job.");
+            jobService.create();
+        }
     }
 }
