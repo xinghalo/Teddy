@@ -2,6 +2,7 @@ package com.xingoo.teddy.manager;
 
 import com.xingoo.teddy.entity.Job;
 import com.xingoo.teddy.service.JobService;
+import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;
@@ -55,6 +56,6 @@ public class RestartManager implements ApplicationRunner {
             }catch (Exception e){
                 logger.error(e.getMessage());
             }
-        },0,autoRestartInterval, TimeUnit.SECONDS);
+        },0,Long.valueOf(TeddyConf.get("auto.restart.interval")), TimeUnit.SECONDS);
     }
 }

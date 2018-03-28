@@ -1,5 +1,6 @@
 package com.xingoo.teddy.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.xingoo.teddy.entity.Job;
 import com.xingoo.teddy.service.JobService;
 import com.xingoo.teddy.utils.Response;
@@ -27,6 +28,7 @@ public class JobController {
 
     @RequestMapping(value = "submit", method = RequestMethod.POST)
     public Response submit(@RequestBody Job job){
+        logger.warn("收到请求启动："+ JSON.toJSONString(job));
         if(jobService.start(job)){
             return Response.SUCCESS("ok");
         }

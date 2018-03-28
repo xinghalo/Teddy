@@ -13,6 +13,8 @@ teddy_home=${bin_absolute_path}/..
 
 export TEDDY_HOME=$teddy_home
 
+`chmod -R 755 $teddy_home`
+
 # Java
 if [ -z "$JAVA" ] ; then
   JAVA=$(which java)
@@ -25,6 +27,6 @@ if [ -f $teddy_home/bin/teddy.pid ] ; then
 fi
 
 # 启动服务
-mkdir -p $akita_home/logs
-$JAVA -jar teddy.jar -p $teddy_home/conf/teddy.properties 1>>$teddy_home/logs/teddy.log 2>&1 &
+mkdir -p $teddy_home/logs
+$JAVA -jar $teddy_home/teddy.jar -p $teddy_home/conf/teddy.properties 1>>$teddy_home/logs/teddy.log 2>&1 &
 echo $! > $teddy_home/bin/teddy.pid

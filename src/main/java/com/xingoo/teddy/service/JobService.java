@@ -1,5 +1,6 @@
 package com.xingoo.teddy.service;
 
+import com.alibaba.fastjson.JSON;
 import com.xingoo.teddy.entity.Job;
 import com.xingoo.teddy.mapper.JobMapper;
 import com.xingoo.teddy.utils.TeddyConf;
@@ -12,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -23,9 +24,6 @@ public class JobService {
 
     @Autowired
     private JobMapper jobMapper;
-
-    @Value("${com.xingoo.streaming.monitor.resource.path}")
-    private String rootPath;
 
     @Value("${yarn.cluster.urls}")
     private String urls;
@@ -43,13 +41,13 @@ public class JobService {
         return true;
     }
 
-    private SparkAppHandle launch(Job job)throws IOException {
-
+    private SparkAppHandle launch(Job job) throws Exception {
+        logger.warn("launch sparkLauncher");
         SparkLauncher launcher = new SparkLauncher()
                 .setAppName(job.getName())
                 .setSparkHome(TeddyConf.get("spark.home"))
                 .setMaster(job.getMaster())
-                .setAppResource(job.getApp_resource())
+                .setAppResource(TeddyConf.get("lib.home")+job.getApp_resource())
                 .setMainClass(job.getMain_class())
                 .addAppArgs(job.getArgs())
                 .setDeployMode(job.getDeploy_mode());
@@ -60,16 +58,29 @@ public class JobService {
             launcher.setConf(strings[0],strings[1]);
         }
 
+        launcher.redirectOutput(new File(TeddyConf.get("log.file")));
+        launcher.redirectError(new File(TeddyConf.get("log.file")));
+
+
+        logger.warn("构建："+ JSON.toJSONString(launcher));
         SparkAppHandle handler = launcher.startApplication();
 
         // 阻塞登到有id再返回
         while(handler.getAppId()==null){
+
+            logger.warn("waiting for appId: "+handler.getAppId()+" "+handler.getState());
+
+            if(handler.getState().isFinal()){
+                throw new RuntimeException("handler "+handler.getState());
+            }
+
             try {
-                Thread.sleep(50);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        logger.warn("Get appId:"+handler.getAppId());
         return handler;
     }
 

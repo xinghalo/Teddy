@@ -3,6 +3,7 @@ package com.xingoo.teddy.manager;
 import com.alibaba.fastjson.JSON;
 import com.xingoo.teddy.entity.Job;
 import com.xingoo.teddy.service.JobService;
+import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;
@@ -22,9 +23,6 @@ import java.util.concurrent.TimeUnit;
 public class AlertManager implements ApplicationRunner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Value("${alert.interval}")
-    private Integer alertInterval;
 
     @Autowired
     private EmailSender emailSender;
@@ -46,7 +44,7 @@ public class AlertManager implements ApplicationRunner {
                     if (StringUtils.isNotBlank(t.getState())
                             && !"RUNNING".equals(t.getState())
                             && t.getSend() == 1) {
-
+                        logger.error("检测到异常任务");
                         emailSender.send(t.getEmail(), t.getName() + "状态异常", JSON.toJSONString(t));
 
                     }
@@ -54,6 +52,6 @@ public class AlertManager implements ApplicationRunner {
             }catch(Exception e){
                 logger.error(e.getMessage());
             }
-        },0,alertInterval, TimeUnit.SECONDS);
+        },0, Long.valueOf(TeddyConf.get("alert.interval")), TimeUnit.SECONDS);
     }
 }

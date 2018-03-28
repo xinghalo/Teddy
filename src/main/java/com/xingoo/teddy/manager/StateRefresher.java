@@ -3,6 +3,7 @@ package com.xingoo.teddy.manager;
 import com.xingoo.teddy.entity.Job;
 import com.xingoo.teddy.service.JobService;
 import com.xingoo.teddy.service.YarnService;
+import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,6 @@ import java.util.concurrent.TimeUnit;
 public class StateRefresher implements ApplicationRunner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Value("${state.refresh.interval}")
-    private Integer stateRefreshInterval;
 
     @Autowired
     private YarnService yarnService;
@@ -53,6 +51,6 @@ public class StateRefresher implements ApplicationRunner {
             }catch (Exception e){
                 logger.error(e.getMessage());
             }
-        },0,stateRefreshInterval, TimeUnit.SECONDS);
+        },0,Long.valueOf(TeddyConf.get("state.refresh.interval")), TimeUnit.SECONDS);
     }
 }
