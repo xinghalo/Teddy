@@ -43,27 +43,52 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">jar</label>
+                    <label class="col-sm-2 control-label">jar包</label>
                     <div class="col-sm-10">
                         <input class="form-control" id="c2JarInput" type="text" value="streaming.jar">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">class</label>
+                    <label class="col-sm-2 control-label">主函数</label>
                     <div class="col-sm-10">
                         <input class="form-control" id="c2ClassInput" type="text" value="com.tgou.data.stanford.streaming.monitor.MonitoringTest">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">args</label>
+                    <label class="col-sm-2 control-label">配置</label>
                     <div class="col-sm-10">
-                        <input class="form-control" id="c2ArgsInput" type="text" value="1,2,3">
+                        <table class="table">
+                            <tbody>
+                                <tr class="warning">
+                                    <td>Driver内存：spark.driver.memory</td>
+                                    <td><input class="form-control" id="c2DriverMemory" type="text" value="5g"></td>
+                                </tr>
+                                <tr class="warning">
+                                    <td>Executor内存：spark.executor.memory</td>
+                                    <td><input class="form-control" id="c2ExecutorMemory" type="text" value="5g"></td>
+                                </tr>
+                                <tr class="warning">
+                                    <td>Executor核数：spark.executor.cores</td>
+                                    <td><input class="form-control" id="c2ExecutorCores" type="text" value="2"></td>
+                                </tr>
+                                <tr class="warning">
+                                    <td>Executor数量：spark.executor.instances</td>
+                                    <td><input class="form-control" id="c2ExecutorNums" type="text" value="3"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">email</label>
+                    <label class="col-sm-2 control-label">参数</label>
                     <div class="col-sm-10">
-                        <input class="form-control" id="c2EmailInput" type="text" value="xinghailong@51tiangou.com">
+                        <input class="form-control" id="c2ArgsInput" type="text" value="name -1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">告警邮件地址</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="c2EmailInput" type="text" value="name@51tiangou.com">
                     </div>
                 </div>
                 <div class="form-group">

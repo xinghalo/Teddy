@@ -1,7 +1,6 @@
 package com.xingoo.teddy.service;
 
 import com.xingoo.teddy.entity.Job;
-import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.mapper.JobMapper;
 import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -23,7 +23,20 @@ public class JobService {
     @Autowired
     private JobMapper jobMapper;
 
-    public SparkAppHandle start(Job job) throws IOException {
+    public Boolean start(Job job){
+        SparkAppHandle handler = null;
+        try {
+            handler = launch(job);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return false;
+        }
+        job.setApp_id(handler.getAppId());
+        save(job);
+        return true;
+    }
+
+    private SparkAppHandle launch(Job job)throws IOException {
 
         SparkLauncher launcher = new SparkLauncher()
                 .setAppName(job.getName())
@@ -50,10 +63,24 @@ public class JobService {
                 e.printStackTrace();
             }
         }
-
-        save(job);
-
         return handler;
+    }
+
+    public Boolean restart(Job job, Integer retries){
+        SparkAppHandle handler = null;
+        try {
+            handler = launch(job);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return false;
+        }
+
+        if(retries!=null) {
+            updateAppIdById(job.getId(), handler.getAppId(), retries);
+        }else{
+            updateAppIdById(job.getId(), handler.getAppId());
+        }
+        return true;
     }
 
     public Boolean stop(Job job) {
@@ -92,6 +119,10 @@ public class JobService {
         return jobMapper.list((page-1)*size,size);
     }
 
+    public List<Job> findAllWithAppId(){
+        return jobMapper.findAllWithAppId();
+    }
+
     public void save(Job job){
         jobMapper.save(job);
     }
@@ -107,6 +138,18 @@ public class JobService {
     public Boolean stop(Integer id){
         Job job = jobMapper.findOne(id);
         return stop(job);
+    }
+
+    public void updateStateById(Integer id, String state){
+        jobMapper.updateStateById(id, state, new Date(System.currentTimeMillis()));
+    }
+
+    public void updateAppIdById(Integer id, String appId, Integer retries){
+        jobMapper.updateAppIdById(id, appId, retries, new Date(System.currentTimeMillis()));
+    }
+
+    public void updateAppIdById(Integer id, String appId){
+        jobMapper.updateAppIdById(id, appId, new Date(System.currentTimeMillis()));
     }
 
 }

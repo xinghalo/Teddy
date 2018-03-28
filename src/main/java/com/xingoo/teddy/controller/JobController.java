@@ -1,20 +1,17 @@
 package com.xingoo.teddy.controller;
 
 import com.xingoo.teddy.entity.Job;
-import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.service.JobService;
 import com.xingoo.teddy.utils.Response;
 import org.apache.spark.launcher.SparkAppHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -31,13 +28,10 @@ public class JobController {
     //@Transactional
     @RequestMapping(value = "submit", method = RequestMethod.POST)
     public Response submit(@RequestBody Job job){
-        try {
-            SparkAppHandle handler = jobService.start(job);
-        } catch (IOException e) {
-            logger.error("job start failed!");
-            return Response.ERROR("启动失败");
+        if(jobService.start(job)){
+            return Response.SUCCESS("ok");
         }
-        return Response.SUCCESS("ok");
+        return Response.ERROR("启动失败");
     }
 
     @RequestMapping("list")
@@ -73,12 +67,7 @@ public class JobController {
         if("RUNNING".equals(job.getState())){
             return Response.ERROR("正在执行，无法重启");
         }else{
-            try{
-                jobService.start(job);
-            }catch (Exception e){
-                return Response.ERROR("启动出错");
-            }
-            return Response.SUCCESS("成功重启");
+            return jobService.restart(job,null)?Response.SUCCESS("成功重启"):Response.ERROR("重启出错");
         }
     }
 

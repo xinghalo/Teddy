@@ -1,8 +1,7 @@
 package com.xingoo.teddy.manager;
 
-import com.alibaba.fastjson.JSON;
-import com.xingoo.teddy.entity.Task;
-import com.xingoo.teddy.service.TaskService;
+import com.xingoo.teddy.entity.Job;
+import com.xingoo.teddy.service.JobService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;
@@ -27,10 +26,7 @@ public class RestartManager implements ApplicationRunner {
     private Integer autoRestartInterval;
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private ProcessManager processManager;
+    private JobService jobService;
 
     private ScheduledExecutorService scheduledThreadPool = new ScheduledThreadPoolExecutor(1,
             new BasicThreadFactory.Builder().namingPattern("restart-pool-%d").daemon(true).build());
@@ -41,20 +37,19 @@ public class RestartManager implements ApplicationRunner {
 
         scheduledThreadPool.scheduleAtFixedRate(()->{
             try {
-                List<Task> tasks = taskService.listAll();
-                logger.info("扫描到" + tasks.size() + "个任务需要检测是否重启");
-                tasks.forEach(t -> {
+                List<Job> jobs = jobService.findAllWithAppId();
+                logger.info("扫描到" + jobs.size() + "个任务需要检测是否重启");
+                jobs.forEach(t -> {
                     if (StringUtils.isNotBlank(t.getState())
                             && !"RUNNING".equals(t.getState())
                             && t.getRestart().equals(1)
-                            && t.getRestart_count() > 0) {
+                            && t.getRetries() > 0) {
                         try {
-                            logger.info("尝试重启task:" + t.getId() + ",剩余次数:" + t.getRestart_count());
-                            taskService.restart(t.getId(), t.getRestart_count() - 1);
+                            logger.info("尝试重启task:" + t.getId() + ",剩余次数:" + t.getRetries());
+                            jobService.restart(t, t.getRetries()-1);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        processManager.start(t);
                     }
                 });
             }catch (Exception e){
