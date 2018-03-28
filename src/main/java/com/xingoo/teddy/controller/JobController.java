@@ -25,7 +25,6 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    //@Transactional
     @RequestMapping(value = "submit", method = RequestMethod.POST)
     public Response submit(@RequestBody Job job){
         if(jobService.start(job)){
@@ -67,7 +66,7 @@ public class JobController {
         if("RUNNING".equals(job.getState())){
             return Response.ERROR("正在执行，无法重启");
         }else{
-            return jobService.restart(job,null)?Response.SUCCESS("成功重启"):Response.ERROR("重启出错");
+            return jobService.restart(job)?Response.SUCCESS("成功重启"):Response.ERROR("重启出错");
         }
     }
 

@@ -20,12 +20,6 @@ $(function() {
             async: false,
             data: data,
             success: function(result) {
-                alert(result.data);
-                // if(result.state === "success"){
-                //     $('#alertDiv').css("display","block");
-                //     $('#alertP').text('删除任务成功');
-                //     taskListParser(result);
-                // }
                 taskListParser(result);
             }
         });
@@ -43,7 +37,6 @@ $(function() {
             async: false,
             data: data,
             success: function(result) {
-                alert(result.data);
                 taskListParser(result);
             }
         });
@@ -61,7 +54,6 @@ $(function() {
             async: false,
             data: data,
             success: function(result) {
-                alert(result.data);
                 taskListParser(result);
             }
         });
@@ -101,7 +93,7 @@ $(function() {
                 html += "<tr id='"+data[i].id+"' "+taskStyle(data[i].state)+">";
                 html += "<td>"+data[i].name+"</td>";
                 html += "<td><button type='button' class='btn btn-default command'>查看配置</button></td>";
-                html += "<td><a href='"+data[i].web_url+"' target='_blank'>"+data[i].application_id+"</a></td>";
+                html += "<td><a href='http://hnode2:8088/cluster/app/"+data[i].app_id+"' target='_blank'>"+data[i].app_id+"</a></td>";
                 html += "<td>"+data[i].state+"</td>";
                 html += "<td><button type='button' class='btn btn-default delete'>删除</button></td>";
                 html += "<td><button type='button' class='btn btn-default stop'>停止</button></td>";

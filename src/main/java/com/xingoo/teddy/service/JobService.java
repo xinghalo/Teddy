@@ -9,6 +9,7 @@ import org.apache.spark.launcher.SparkLauncher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,6 +23,12 @@ public class JobService {
 
     @Autowired
     private JobMapper jobMapper;
+
+    @Value("${com.xingoo.streaming.monitor.resource.path}")
+    private String rootPath;
+
+    @Value("${yarn.cluster.urls}")
+    private String urls;
 
     public Boolean start(Job job){
         SparkAppHandle handler = null;
@@ -66,21 +73,35 @@ public class JobService {
         return handler;
     }
 
-    public Boolean restart(Job job, Integer retries){
+    public Boolean autoRestart(Job job){
+        Boolean result  = false;
         SparkAppHandle handler = null;
         try {
             handler = launch(job);
+            result = true;
+            //成功的时候，回复重启数量
+            job.setRetries(3);
+            job.setApp_id(handler.getAppId());
         }catch (Exception e){
             logger.error(e.getMessage());
-            return false;
+            job.setRetries(job.getRetries()-1);
         }
+        update(job);
+        return result;
+    }
 
-        if(retries!=null) {
-            updateAppIdById(job.getId(), handler.getAppId(), retries);
-        }else{
-            updateAppIdById(job.getId(), handler.getAppId());
+    public Boolean restart(Job job){
+        Boolean result  = false;
+        SparkAppHandle handler = null;
+        try {
+            handler = launch(job);
+            result = true;
+            job.setApp_id(handler.getAppId());
+        }catch (Exception e){
+            logger.error(e.getMessage());
         }
-        return true;
+        update(job);
+        return result;
     }
 
     public Boolean stop(Job job) {
@@ -140,16 +161,7 @@ public class JobService {
         return stop(job);
     }
 
-    public void updateStateById(Integer id, String state){
-        jobMapper.updateStateById(id, state, new Date(System.currentTimeMillis()));
+    public void update(Job job){
+        jobMapper.update(job);
     }
-
-    public void updateAppIdById(Integer id, String appId, Integer retries){
-        jobMapper.updateAppIdById(id, appId, retries, new Date(System.currentTimeMillis()));
-    }
-
-    public void updateAppIdById(Integer id, String appId){
-        jobMapper.updateAppIdById(id, appId, new Date(System.currentTimeMillis()));
-    }
-
 }

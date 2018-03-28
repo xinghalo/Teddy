@@ -37,7 +37,7 @@ public interface JobMapper {
     @Select("select * from job OFFSET #{start} ROWS FETCH NEXT #{size} ROWS ONLY")
     List<Job> list(@Param("start")Integer start, @Param("size")Integer size);
 
-    @Select("select * from job where app_id != -1")
+    @Select("select * from job where app_id != '-1'")
     List<Job> findAllWithAppId();
 
     @Insert({"insert into job(" +
@@ -54,13 +54,11 @@ public interface JobMapper {
     @Delete("delete from job where id = #{id}")
     void delete(@Param("id") Integer id);
 
-    @Update("update job set state = #{state}, modify_time=#{date} where id = #{id}")
-    void updateStateById(Integer id, String state, Date date);
-
-    @Update("update job set app_id = #{appId}, retries = #{retries}, modify_time=#{date} where id = #{id}")
-    void updateAppIdById(Integer id, String appId, Integer retries, Date date);
-
-    @Update("update job set app_id = #{appId}, modify_time=#{date} where id = #{id}")
-    void updateAppIdById(Integer id, String appId, Date date);
+    @Insert("update job set " +
+            "app_id = #{t.app_id}," +
+            "state  = #{t.state}," +
+            " retries = #{t.retries}" +
+            " where id = #{t.id}")
+    void update(@Param("t")Job job);
 
 }

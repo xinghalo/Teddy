@@ -46,7 +46,7 @@ public class RestartManager implements ApplicationRunner {
                             && t.getRetries() > 0) {
                         try {
                             logger.info("尝试重启task:" + t.getId() + ",剩余次数:" + t.getRetries());
-                            jobService.restart(t, t.getRetries()-1);
+                            jobService.autoRestart(t);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
