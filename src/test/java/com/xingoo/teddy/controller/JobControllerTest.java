@@ -43,4 +43,20 @@ public class JobControllerTest {
                 });
     }
 
+
+    @Test
+    public void start() throws Exception {
+        // 查询内容类型
+        mvc.perform(MockMvcRequestBuilders
+                .get("/job/start")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .param("app_id","1")
+                .param("size","20")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(mvcResult -> {
+                    System.out.println(mvcResult.getResponse().getContentAsString());
+                });
+    }
+
+
 }

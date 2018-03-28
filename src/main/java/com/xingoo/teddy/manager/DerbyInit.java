@@ -23,11 +23,11 @@ public class DerbyInit implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("check db env ...");
-        if (taskService.count() < 0) {
-            logger.info("create table task.");
-            taskService.create();
-
-        }
+//        if (taskService.count() < 0) {
+//            logger.info("create table task.");
+//            taskService.create();
+//
+//        }
 
         logger.info("check table job env ...");
         if(jobService.count() < 0){

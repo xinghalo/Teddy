@@ -1,6 +1,6 @@
 $(function() {
     var req = function () {
-        $.post("/task/list",{},function(response){
+        $.post("/job/list",{},function(response){
             taskListParser(response);
         });
     };
@@ -13,17 +13,19 @@ $(function() {
         var data = new FormData();
         data.append("id",$(this).parent().parent()[0].id);
         $.ajax({
-            url: "/task/delete",
+            url: "/job/delete",
             type: "POST",
             processData: false,
             contentType: false,
+            async: false,
             data: data,
             success: function(result) {
-                if(result.state === "success"){
-                    $('#alertDiv').css("display","block");
-                    $('#alertP').text('删除任务成功');
-                    taskListParser(result);
-                }
+                alert(result.data);
+                // if(result.state === "success"){
+                //     $('#alertDiv').css("display","block");
+                //     $('#alertP').text('删除任务成功');
+                //     taskListParser(result);
+                // }
                 taskListParser(result);
             }
         });
@@ -34,17 +36,14 @@ $(function() {
         var data = new FormData();
         data.append("id",$(this).parent().parent()[0].id);
         $.ajax({
-            url: "/task/stop",
+            url: "/job/stop",
             type: "POST",
             processData: false,
             contentType: false,
+            async: false,
             data: data,
             success: function(result) {
-                if(result.state === "success"){
-                    $('#alertDiv').css("display","block");
-                    $('#alertP').text('停止任务成功');
-
-                }
+                alert(result.data);
                 taskListParser(result);
             }
         });
@@ -55,17 +54,14 @@ $(function() {
         var data = new FormData();
         data.append("id",$(this).parent().parent()[0].id);
         $.ajax({
-            url: "/task/restart",
+            url: "/job/restart",
             type: "POST",
             processData: false,
             contentType: false,
+            async: false,
             data: data,
             success: function(result) {
-                if(result.state === "success"){
-                    $('#alertDiv').css("display","block");
-                    $('#alertP').text('重启任务成功');
-                    taskListParser(result);
-                }
+                alert(result.data);
                 taskListParser(result);
             }
         });
@@ -75,15 +71,21 @@ $(function() {
         var data = new FormData();
         data.append("id",$(this).parent().parent()[0].id);
         $.ajax({
-            url: "/task/find",
+            url: "/job/find",
             type: "POST",
             processData: false,
             contentType: false,
+            async: false,
             data: data,
             success: function(result) {
                 if(result.state === "success"){
                     $('#info_modal_title').text(result.data.name+"的配置：");
-                    $('#info_modal_body').text(result.data.command);
+                    var _html = "";
+                    for(var k in result.data){//遍历json数组时，这么写p为索引，0,1
+                        _html+="<tr><td>"+k+"</td><td>"+result.data[k]+"</td></tr>"
+                    }
+                    $('#c1_config_body').html(_html);
+                    //$('#info_modal_body').html(_html);
                     $('#info_modal').modal('show');
                 }
             }

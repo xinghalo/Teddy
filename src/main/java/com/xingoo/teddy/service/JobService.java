@@ -1,11 +1,14 @@
 package com.xingoo.teddy.service;
 
 import com.xingoo.teddy.entity.Job;
+import com.xingoo.teddy.entity.Task;
 import com.xingoo.teddy.mapper.JobMapper;
 import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.lang.StringUtils;
 import org.apache.spark.launcher.SparkAppHandle;
 import org.apache.spark.launcher.SparkLauncher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.List;
 
 @Service
 public class JobService {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private JobMapper jobMapper;
@@ -46,7 +51,22 @@ public class JobService {
             }
         }
 
+        save(job);
+
         return handler;
+    }
+
+    public Boolean stop(Job job) {
+        String command = "yarn application -kill "+job.getApp_id();
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            process.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        logger.info("kill "+job.getApp_id());
+        return true;
     }
 
     /**
@@ -76,6 +96,17 @@ public class JobService {
         jobMapper.save(job);
     }
 
+    public Job findOne(Integer id){
+        return jobMapper.findOne(id);
+    }
 
+    public void delete(Integer id){
+        jobMapper.delete(id);
+    }
+
+    public Boolean stop(Integer id){
+        Job job = jobMapper.findOne(id);
+        return stop(job);
+    }
 
 }

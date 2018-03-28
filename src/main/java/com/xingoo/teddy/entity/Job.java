@@ -3,18 +3,18 @@ package com.xingoo.teddy.entity;
 public class Job {
     private Integer id;
     private String name;
-    private String app_id;
-    private String state;
+    private String app_id = "-1";
+    private String state = "created";
     private String app_resource;
     private String main_class;
-    private String master;
-    private String deploy_mode;
+    private String master = "yarn";
+    private String deploy_mode = "cluster";
     private String args;
     private String config;
     private String email;
     private Integer send;
     private Integer restart;
-    private Integer retries;
+    private Integer retries = 3;
 
     public Integer getId() {
         return id;
