@@ -23,9 +23,6 @@ public class RestartManager implements ApplicationRunner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${auto.restart.interval}")
-    private Integer autoRestartInterval;
-
     @Autowired
     private JobService jobService;
 

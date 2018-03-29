@@ -1,5 +1,6 @@
 package com.xingoo.teddy.manager;
 
+import com.xingoo.teddy.utils.TeddyConf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,21 +21,6 @@ public class EmailSender {
     private Transport transport = null;
     private Session session = null;
 
-    @Value("${mail.host}")
-    private String mailHost;
-
-    @Value("${mail.transport.host}")
-    private String mailTransportHost;
-
-    @Value("${mail.transport.user}")
-    private String mailTransportUser;
-
-    @Value("${mail.transport.passwd}")
-    private String mailTransportPasswd;
-
-    @Value("${mail.from}")
-    private String mailFrom;
-
 
     public EmailSender(){}
 
@@ -42,7 +28,7 @@ public class EmailSender {
         if (transport == null || session == null) {
             Properties properties = System.getProperties();
             // 设置邮件服务器
-            properties.setProperty("mail.host", mailHost);
+            properties.setProperty("mail.host", TeddyConf.get("mail.host"));
             properties.setProperty("mail.transport.protocol", "smtp");
             properties.setProperty("mail.smtp.auth", "true");
 
@@ -62,13 +48,13 @@ public class EmailSender {
         try {
             // create message
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(mailFrom));
+            message.setFrom(new InternetAddress(TeddyConf.get("mail.from")));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject(subject);
             message.setText(text);
 
             // transport send
-            transport.connect(mailTransportHost, mailTransportUser, mailTransportPasswd);
+            transport.connect(TeddyConf.get("mail.host"), TeddyConf.get("mail.from"), TeddyConf.get("mail.passwd"));
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
 

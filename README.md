@@ -8,213 +8,69 @@
 1. Streaming任务部署
 2. 任务监控与告警
 3. 任务自启动
+4. (new)任务资源自定义配置
+5. (new)Spark Streaming代码零侵入
 
 ## 效果展示
 
-![首页](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/1.jpg)
-![任务配置](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/2.jpg)
+![首页](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/4.jpg)
+![任务配置](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/6.jpg)
 ![jar包管理](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/3.jpg)
+![配置浏览](https://raw.githubusercontent.com/xinghalo/StreamingMonitor/master/description/img/5.jpg)
 
 ## 使用说明
 
 ### 1 主要需要注意的参数
 
 ```
-# 发布地址
-server.address=0.0.0.0
-server.port=18081
+###########
+# 环境配置 #
+###########
 
-# 注册地址
-register.url=http://hnode10:18081/task/register
+# 本地spark的安装目录
+spark.home=/var/lib/hadoop-hdfs/app/spark
 
-# jar包上传目录
-com.xingoo.streaming.monitor.resource.path=/home/xinghailong/monitor/lib/
+# 本地资源的上传目录
+lib.home=/home/xinghailong/monitor/lib/
+
+# spark任务重定向日志文件，如果不嫌弃，可以直接重定向到日志文件
+log.file=/home/xinghailong/monitor2/teddy/logs/teddy.log
+
+# yarn的连接地址，用于Http方式查询spark任务的状态
+yarn.cluster=hnode1:8088,hnode2:8088
+
+# 邮件配置
+mail.host=smtp.mxhichina.com
+mail.from=report@abc.com
+mail.passwd=123
+
+###########
+# 性能配置 #
+###########
 
 # 告警时间配置，秒单位，默认一分钟
+# 注意：如果告警时间很短，小心邮件爆炸！
 alert.interval=60
 
 # 状态刷新时间配置，秒单位，默认5秒钟
-state.refresh.interval=10
+state.refresh.interval=5
 
 # 自动重启间隔时间，3分钟
-auto.restart.interval=60
+# 注意：如果自定重启时间很短，可能会导致任务的重复启动
+auto.restart.interval=180
 
-# derby数据库url
-spring.datasource.url=jdbc:derby:/home/xinghailong/monitor/db;create=true  
+# 尝试重启的次数
+auto.restart.retries=3
 ```
 
-### 2 在Streaming代码中加入下面的处理逻辑
+### 2 启动teddy
 
-```scala
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.spark.SparkConf
-import org.apache.spark.streaming.{Duration, StreamingContext}
+下载代码后执行mvn install，即可编译打包项目工程。如果不想编译，也可以直接下载下面的版本：
 
-/**
-  * 注册SparkStreaming
-  */
-object StreamingMonitor{
+待补充
 
-  /**
-    * 创建streamingContext
-    *
-    * @param args     参数
-    * @param duration 窗口
-    * @param name     名字
-    * @return
-    */
-  def createContext(args:Array[String],duration:Duration,name:String):StreamingContext = {
-    val sparkConf = new SparkConf().setAppName(name)
-    createContext(args,sparkConf,duration)
-  }
-
-  /**
-    * 创建streamingContext
-    *
-    * @param args     参数
-    * @param conf     配置
-    * @param duration 窗口
-    * @return
-    */
-  def createContext(args:Array[String], conf: SparkConf, duration:Duration):StreamingContext = {
-    println("*************** register begin **************")
-
-    println("args:")
-    args.foreach(println)
-    println()
-
-    System.setProperty("hive.metastore.uris", "thrift://hnode1:9083")
-
-    val ssc = new StreamingContext(conf,duration)
-    ssc.sparkContext.setLogLevel("warn")
-
-    val appId = ssc.sparkContext.applicationId
-    val url = ssc.sparkContext.uiWebUrl.get
-    val taskId = args(args.length-1)
-    val register = args(args.length-2)
-
-    val httpUrl = s"$register?taskId=$taskId&appId=$appId&state=REGISTER&url=$url"
-
-    println(s"注册URL地址为:$httpUrl")
-
-    val response = new DefaultHttpClient().execute(new HttpGet(httpUrl))
-    if(response.getStatusLine.getStatusCode!=200){
-      throw new Exception("注册失败")
-    }
-
-    println("*************** register end **************")
-
-    ssc
-  }
-
-}
-```
-
-使用的时候，直接基于他创建StreamingContext即可。
-```scala
-import com.alibaba.fastjson.JSON
-import com.tgou.data.stanford.streaming.StreamingMonitor
-import kafka.serializer.StringDecoder
-import org.apache.spark.streaming.Seconds
-import org.apache.spark.streaming.kafka.KafkaUtils
-
-object MonitoringTest {
-  def main(args: Array[String]): Unit = {
-
-    val ssc = StreamingMonitor.createContext(args,Seconds(5), "MonitoringTest")
-
-    // Create direct kafka stream with brokers and topics
-    val kafkaParams = Map[String, String](
-      "metadata.broker.list" -> "hnode9:9092,hnode10:9092",
-      "enable.auto.commit" -> "true")
-
-    val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
-      ssc, kafkaParams, Set("tgs-topic"))
-
-
-    val lines = messages.map(_._2).map(line => JSON.parseObject(line))
-
-    lines.print()
-
-    ssc.start()
-
-    ssc.awaitTermination()
-  }
-}
-```
-如果使用了检查点，可以这样：
-```scala
-def main(args: Array[String]): Unit = {
-    val ssc = StreamingContext.getOrCreate(CHECKPOINT_PATH,() => createContext(args))
-    ssc.start()
-    ssc.awaitTermination()
-  }
-
-  def createContext(args:Array[String]): StreamingContext = {
-
-
-    /**************************************************************
-    * 1. 创建StreamingContext，并完成注册的监控                      *
-    * ************************************************************/
-
-    val ssc = StreamingMonitor.createContext(args,WINDOW_TIME,MonitoringTest)
-    ...
-```
-### 3 启动StreamingMonitor
-
-start.sh
-```sbtshell
-nohup java -jar teddy.jar &
-```
-
-stop.sh
-```sbtshell
-#!/bin/bash
-PID=`ps -ef | grep teddy|grep -v grep | awk '{print $2}'`
-kill -9 $PID
-```
-
-### 4 开启任务
-
-点击任务管理，配置任务即可。
-
-## 开发进度
-
-### 2017-12-27
-
-基于yarn的spark streaming任务管理服务，支持一下功能：
-
-1. web端提交任务
-2. streaming状态管理
-3. streaming异常检测与邮件告警
-
-前端参考：http://www.cssmoban.com/cssthemes/6836.shtml
-
-### 2017-12-28 进度
-
-- ~~1. 支持任务的自动重启与手动重启~~
-- ~~4. 后段去掉基于线程的告警和检测服务~~ 改用ScheduledThreadPoolExecutor代替
-- ~~5. 支持任务的删除停止~~
-
-### 2018-01-08 
-
-- ~~重构前端界面~~
-- ~~增加拖拽上传控件~~ 参考：http://www.htmleaf.com/jQuery/Form/201510142663.html
-
-### 2018-01-12
-
-- 增加任务界面的轮训查看
-- 丰富提交任务的界面
-- 前端框架重构，现在是基于bootstrap+jquery有点乱
-- 增加使用说明文档
-- 底层基于derby+mybatis+druid
-- 支持任务自动重启
-
-### 待完成
-
-3. 丰富告警类型
-4. 支持在线streaming无缝升级
+编译后，在target目录下，可以找到对应的teddy-release压缩包。
+目前仅支持Linux系统，修改相应的环境配置，启动即可。
 
 ## 链接
 

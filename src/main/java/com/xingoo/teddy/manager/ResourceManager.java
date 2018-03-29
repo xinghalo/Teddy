@@ -1,5 +1,6 @@
 package com.xingoo.teddy.manager;
 
+import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 @Service
 public class ResourceManager {
 
-    public static final String PATH = "com.xingoo.streaming.monitor.resource.path";
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -28,7 +28,7 @@ public class ResourceManager {
 
     public List<String> listJars(){
 
-        File directory = new File(env.getProperty(PATH));
+        File directory = new File(TeddyConf.get("lib.home"));
         IOFileFilter filter = FileFilterUtils.suffixFileFilter("jar");
 
         // filter *.jar
@@ -39,7 +39,7 @@ public class ResourceManager {
 
     public List<String> save(MultipartFile file){
         try {
-            File saveFile = new File(env.getProperty(PATH)+file.getOriginalFilename());
+            File saveFile = new File(TeddyConf.get("lib.home")+file.getOriginalFilename());
 
             // delete when exsit
             if(saveFile.exists()){
@@ -65,7 +65,7 @@ public class ResourceManager {
     }
 
     public String getJar(String jar){
-        return env.getProperty(PATH)+jar;
+        return TeddyConf.get("lib.home")+jar;
     }
 
     public List<String> delete(String jar){

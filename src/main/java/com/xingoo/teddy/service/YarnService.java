@@ -1,6 +1,7 @@
 package com.xingoo.teddy.service;
 
 import com.alibaba.fastjson.JSON;
+import com.xingoo.teddy.utils.TeddyConf;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,15 +17,12 @@ public class YarnService {
 
     private CloseableHttpClient httpclient = HttpClients.createDefault();
 
-    @Value("${yarn.cluster.urls}")
-    private String urls;
-
     /**
      * https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html#Cluster_Application_State_API
      * @return
      */
     public String state(String app_id){
-        for(String host : urls.split(",")){
+        for(String host : TeddyConf.get("yarn.cluster").split(",")){
             HttpGet httpGet = new HttpGet("http://"+host+"/ws/v1/cluster/apps/"+ app_id + "/state");
             httpGet.setHeader("Content-Type", "application/json");
             CloseableHttpResponse resp = null;

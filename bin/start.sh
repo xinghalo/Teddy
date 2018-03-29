@@ -9,6 +9,7 @@ case "`uname`" in
 		bin_absolute_path=`cd $(dirname $0); pwd`
 		;;
 esac
+
 teddy_home=${bin_absolute_path}/..
 
 export TEDDY_HOME=$teddy_home

@@ -1,5 +1,7 @@
 package com.xingoo.teddy.entity;
 
+import com.xingoo.teddy.utils.TeddyConf;
+
 public class Job {
     private Integer id;
     private String name;
@@ -14,7 +16,7 @@ public class Job {
     private String email;
     private Integer send;
     private Integer restart;
-    private Integer retries = 3;
+    private Integer retries = Integer.valueOf(TeddyConf.get("auto.restart.retries"));
 
     public Integer getId() {
         return id;

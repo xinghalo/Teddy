@@ -25,9 +25,6 @@ public class JobService {
     @Autowired
     private JobMapper jobMapper;
 
-    @Value("${yarn.cluster.urls}")
-    private String urls;
-
     public Boolean start(Job job){
         SparkAppHandle handler = null;
         try {
